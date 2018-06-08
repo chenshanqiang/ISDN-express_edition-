@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>音视频一线通终端管理设置</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10,chrome=1">
+        <!-- Mobile Metas -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="./css/nativeMachineConfiguration.css"> </head>
+    <body>
+        <div class="x-nav">
+            <span class="layui-breadcrumb" lay-separator=">">
+                <a>
+                    <cite>首页</cite>
+                </a>
+                <a>
+                    <cite>管理员</cite>
+                </a>
+                <a>
+                    <cite>本机配置</cite>
+                </a>
+            </span>
+            <a class="layui-btn layui-btn-sm" id="fresh" style="float: right;" href="javascript:location.replace(location.href);" title="刷新">
+                <i class="layui-icon layui-icon-refresh"></i>
+            </a>
+        </div>
+        <form class="layui-form layui-form-pane" style="margin-top:20px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">IP</label>
+                <div class="layui-input-block">
+                    <input type="text" id="b_ip" name="title" autocomplete="off" placeholder="请输入IP地址" class="layui-input"> </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">子网掩码</label>
+                <div class="layui-input-block">
+                    <input type="text" id="b_subnet" name="title" autocomplete="off" placeholder="请输入子网掩码" class="layui-input"> </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">网关</label>
+                <div class="layui-input-block">
+                    <input type="text" id="gateWay" name="title" autocomplete="off" placeholder="请输入网关" class="layui-input"> </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">MAC地址</label>
+                <div class="layui-input-block">
+                    <input type="text" id="b_MAC" name="title" autocomplete="off" placeholder="请输入MAC地址" class="layui-input" disabled="disabled"> </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">终端名称</label>
+                <div class="layui-input-block">
+                    <input type="text" id="b_name" name="title" autocomplete="off" placeholder="名称修改" class="layui-input"> </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn  layui-btn-primary" lay-submit="" lay-filter="demo1">提交</button>
+            </div>
+            <div class="layui-form-item" pane=" " style="margin-top: 30px;">
+                <label class="layui-form-label label-one lable-auto">220V输出电源开关机模式 </label>
+                <div class="layui-input-block layui-input-block-first">
+                    <input type="radio" id='normalOpen' name="power" value="常开" title="常开" lay-filter='radio1' />
+                    <input type="radio" id='normalClose' name="power" value="常关" title="常关" lay-filter='radio1' />
+                    <input type="radio" id='auto' name="power" value="自动" title="自动" lay-filter='radio1' /> </div>
+            </div>
+            <div class="layui-form-item" pane=" ">
+                <label class="layui-form-label label-one lable-auto">播放视频源是否打开电源 </label>
+                <div class="layui-input-block layui-input-block-first">
+                    <input type="radio" id='startOne' name="statusTwo" value="是" title="是" lay-filter='radio2' />
+                    <input type="radio" id='stopOne' name="statusTwo" value="否" title="否" lay-filter='radio2' /> </div>
+            </div>
+            <div class="layui-form-item" pane=" ">
+                <label class="layui-form-label label-one lable-auto">播放视频源结束后是否自动待机 </label>
+                <div class="layui-input-block layui-input-block-first">
+                    <input type="radio" id='startTwo' name="statusFour" value="是" title="是" lay-filter='radio' />
+                    <input type="radio" id='stopTwo' name="statusFour" value="否" title="否" lay-filter='radio' /> </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label label-one lable-auto">播放视频源结束后延时关闭电源 </label>
+                <div class="layui-input-inline">
+                    <input type="text" onkeyup="checkTimeOne('timeOne')" name="title" id='timeOne' class="layui-input text-align"> </div>
+                <div class="layui-form-mid">分钟</div>
+                <div class="layui-form-mid layui-word-aux">注：输入范围为1-30</div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">关机时间 </label>
+                    <div class="layui-input-inline">
+                        <input type="text" onchange="checkTimeTwo('timeThree')" name="title" id="timeThree" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开机时间 </label>
+                    <div class="layui-input-inline">
+                        <input type="text" onchange="checkTimeTwo('timeTwo')" name="title" id="timeTwo" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-form-mid layui-word-aux">注：只可设置当天的时间，不支持跨日设置</div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn  layui-btn-primary" lay-submit="" lay-filter="demo2">提交</button>
+            </div>
+        </form>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>查看图片</legend>
+            <div class="layui-form" style="margin-top: 30px;">
+                <div class="layui-form-item" style="padding-left: 40px;">
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-primary" id="view_image">查看图片</button>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">总存储空间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="totalStorageSpace" id="totalStorageSpace" class="layui-input text-align"> </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">已使用</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="haveBeenUsed" id="haveBeenUsed" class="layui-input text-align"> </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">使用率</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="usageRates" id="usageRates" class="layui-input text-align"> </div>
+                    </div>
+                </div>
+            </div>
+            <div id='imgs' name='test'> </div>
+        </fieldset>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>上传图片</legend>
+            <div style="margin-top:5%;margin-left:5%;margin-bottom: 5%;">
+                <input type="file" id="file1" value="选择图片" />
+                <input type="button" id="upload" value="上传图片" />
+                <span style="display:none;color:red;" id="imgWait">上传图片中...</span>
+            </div>
+        </fieldset>
+        <script type="text/javascript" src="./js/protocal.js"></script>
+        <script type="text/javascript" src="./js/security.js"></script>
+        <script type="text/javascript" src="./js/jquery-3.2.1.js"></script>
+        <script type="text/javascript" src="./js/update.js"></script>
+        <script type="text/javascript" src="./layui/layui.js"></script>
+        <script type="text/javascript" src="./js/base64.js"></script>
+        <script type="text/javascript">
+            layui.use(['element', 'layer','form'], function () {
+                var form = layui.form,
+                    layer = layui.layer,
+                    $ = layui.jquery;
+                /*radio监听事件开始*/
+                form.on('radio(radio)', function (data) {
+                    if(data.value == '是') {
+                        $('#timeOne').removeAttr('disabled');
+                    } else {
+                        $('#timeOne').attr('disabled', 'disabled');
+                    }
+                });
+                /*常开、常关、自动开始*/
+                form.on('radio(radio1)', function (data) {
+                    if(data.value == '常开') {
+                        $('#startOne').attr('disabled', '');
+                        $('#stopOne').attr('disabled', '');
+                        $('#startTwo').attr('disabled', '');
+                        $('#stopTwo').attr('disabled', '');
+                        $('#timeOne').attr('disabled', 'disabled');
+                    } else if(data.value == '常关') {
+                        $('#startOne').attr('disabled', '');
+                        $('#stopOne').attr('disabled', '');
+                        $('#startTwo').attr('disabled', '');
+                        $('#stopTwo').attr('disabled', '');
+                        $('#timeOne').attr('disabled', 'disabled');
+                    } else {
+                    		$('#startOne').removeAttr('disabled');
+                            $('#stopOne').removeAttr('disabled');
+                        if($('#stopOne').prop('checked')) {
+                            $('#startTwo').attr('disabled', '');
+                            $('#stopTwo').attr('disabled', '');
+                            $('#timeOne').attr('disabled', 'disabled');
+                        } else {
+                            $('#startTwo').removeAttr('disabled');
+                            $('#stopTwo').removeAttr('disabled');
+                            $('#timeOne').removeAttr('disabled');
+                        }
+                    }
+                    form.render();
+                })
+                /*常开、常关、自动结束*/
+                form.on('radio(radio2)', function (data) {
+                    if(data.value == '是') {
+                        $('#timeOne').removeAttr('disabled');
+                        $('#startTwo').removeAttr('disabled');
+                        $('#stopTwo').removeAttr('disabled');
+                        if($('#startTwo').prop('checked') == false) {
+                            $('#timeOne').attr('disabled', 'disabled');
+                        } else {
+                            $('#timeOne').removeAttr('disabled');
+                        }
+                    } else {
+                        $('#startTwo').attr('disabled', '');
+                        $('#stopTwo').attr('disabled', '');
+                        $('#timeOne').attr('disabled', 'disabled');
+                    }
+                    form.render();
+                });
+                /*radio监听事件结束*/
+                /*界面初始值开始*/
+                try {
+                    var resultone = protocal_get_one("pic_work", null);
+                    var resulttwo = protocal_get("localnet", null);
+                    /*var resultone = ['100', '1', '1%']
+                    var resulttwo = ['12', '12', '12', '12', '12', '2', 'off', '12', 'off', '12', '12', '12', '12', '12', '12', ]*/
+                    if(resultone.length < 3) {} else {
+                        $('#totalStorageSpace').val(resultone[0] + 'KB');
+                        $('#haveBeenUsed').val(resultone[1] + 'KB');
+                        $('#usageRates').val(resultone[2]);
+                    }
+                    if(resulttwo.length < 11) {} else {
+                        var base = new Base64();
+                        var name = base.decode(resulttwo[4]);
+                        var resultArraytwo = resulttwo[9] + ':' + resulttwo[10] + ':' + resulttwo[11],
+                            resultArraythree = resulttwo[12] + ':' + resulttwo[13] + ':' + resulttwo[14];
+                        $('#b_ip').val(resulttwo[0]);
+                        $('#b_subnet').val(resulttwo[1]);
+                        $('#gateWay').val(resulttwo[2]);
+                        $('#b_MAC').val(resulttwo[3]);
+                        $('#b_name').val(name);
+                        $('#timeOne').val(resulttwo[7]);
+                        $('#timeThree').val(resultArraytwo);
+                        $('#timeTwo').val(resultArraythree);
+                        if(resulttwo[5] == '0') {
+                            $('#normalOpen').prop('checked', ' ');
+                            $('#startOne').attr('disabled', '');
+                            $('#stopOne').attr('disabled', '');
+                            $('#startTwo').attr('disabled', '');
+                            $('#stopTwo').attr('disabled', '');
+                            $('#timeOne').attr('disabled', 'disabled');
+                        } else if(resulttwo[5] == '1') {
+                            $('#normalClose').prop('checked', ' ');
+                            $('#startOne').attr('disabled', '');
+                            $('#stopOne').attr('disabled', '');
+                            $('#startTwo').attr('disabled', '');
+                            $('#stopTwo').attr('disabled', '');
+                            $('#timeOne').attr('disabled', 'disabled');
+                        } else {
+                            $('#auto').prop('checked', ' ');
+                            $('#startOne').removeAttr('disabled', '');
+                            $('#stopOne').removeAttr('disabled', '');
+                            $('#startTwo').removeAttr('disabled', '');
+                            $('#stopTwo').removeAttr('disabled', '');
+                            $('#timeOne').removeAttr('disabled', 'disabled');
+                        }
+                        if(resulttwo[6] == 'on') {
+                            $('#startOne').prop('checked', ' ');
+                            if(resulttwo[8] == 'on') {
+                                $('#startTwo').prop('checked', ' ');
+                                if(resulttwo[5] != '2') {
+                                    $('#timeOne').attr('disabled', 'disabled');
+                                } else {
+                                    $('#timeOne').removeAttr('disabled');
+                                }
+                            } else {
+                                $('#stopTwo').prop('checked', ' ');
+                                $('#timeOne').attr('disabled', 'disabled');
+                            }
+                        } else {
+                            $('#stopOne').prop('checked', ' ');
+                            $('#startTwo').attr('disabled', 'disabled');
+                            $('#stopTwo').attr('disabled', 'disabled');
+                            $('#timeOne').attr('disabled', 'disabled');
+                            if(resulttwo[8] == 'on') {
+                                $('#startTwo').prop('checked', ' ');
+                            } else {
+                                $('#stopTwo').prop('checked', ' ');
+                            }
+                        }
+                        form.render();
+                    }
+                } catch(err) {}
+                /*界面初始值结束*/
+                /*第一个提交按钮 开始*/
+                form.on('submit(demo1)', function (data) {
+                    var result_1 = $('#b_ip').val(),
+                        result_2 = $('#b_subnet').val(),
+                        result_3 = $('#gateWay').val(),
+                        result_4 = $('#b_MAC').val(),
+                        result_5 = $('#b_name').val();
+                    var reg = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
+                    var regsubnet = /^(254|252|248|240|224|192|128)\.0\.0\.0|255\.(254|252|248|240|224|192|128|0)\.0\.0|255\.255\.(254|252|248|240|224|192|128|0)\.0|255\.255\.255\.(254|252|248|240|224|192|128|0)$/;
+                    var regGateway = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
+                    var resultIp = result_1.split(".");
+                    var resultSubnet = result_2.split(".");
+                    var regGateWayAll = result_3.split(".");
+                    var andResultOne = resultIp[0] & resultSubnet[0],
+                        andResultTwo = resultIp[1] & resultSubnet[1],
+                        andResultThree = resultIp[2] & resultSubnet[2],
+                        andResultFour = resultIp[3] & resultSubnet[3];
+                    var andResultFive = resultSubnet[0] & regGateWayAll[0],
+                        andResultSix = resultSubnet[1] & regGateWayAll[1],
+                        andResultSeven = resultSubnet[2] & regGateWayAll[2],
+                        andResultEight = resultSubnet[3] & regGateWayAll[3];
+                    var resultFiveArray = stringToBytes(result_5);
+                    if(result_1 != '' && result_2 != '' && result_3 != '' && result_4 != '' && result_5 != '') {
+                        if(reg.test(result_1)) {
+                            if(regsubnet.test(result_2)) {
+                                if(regGateway.test(result_3)) {
+                                    if(resultFiveArray.length <= '32') {
+                                        if(andResultOne == andResultFive && andResultTwo == andResultSix && andResultThree == andResultSeven && andResultFour == andResultEight) {
+                                            var base = new Base64();
+                                            var result_51 = base.encode(result_5);
+                                            var result = result_1 + '&' + result_2 + '&' + result_3 + '&' + result_4 + '&' + result_51;
+                                            try {
+                                                var resultarray = protocal_set('localnet', result);
+                                                if(resultarray.length == 2) {
+                                                    if(resultarray[0] == 'ok' && resultarray[1] == 'ok') layer.msg('提交成功！', {
+                                                        time: 3000,
+                                                        icon: 1,
+                                                        anim: 0,
+                                                        skin: 'message',
+                                                        shade: [0.5, '#393D49']
+                                                    });
+                                                } else if(resultarray.length == 3) {
+                                                    if(resultarray[0] == 'ok' && resultarray[1] == 'ok' && resultarray[2] == 'ok') top.layer.open({
+                                                        title: false,
+                                                        icon: 6,
+                                                        time: 250000,
+                                                        content: '提交成功，正在重启系统...',
+                                                        btn: false,
+                                                        skin: "layui-layer-molv",
+                                                        closeBtn: 0,
+                                                    })
+                                                    setCookie("username", "", "pass", "");
+                                                    setTimeout(function () {
+                                                        window.parent.open("http://" + $("#b_ip").val(), '_self');
+                                                    }, 25000);
+                                                } else {
+                                                    layer.msg('提交失败！', {
+                                                        time: 3000,
+                                                        icon: 2,
+                                                        anim: 0,
+                                                        skin: 'message',
+                                                        shade: [0.5, '#393D49']
+                                                    });
+                                                }
+                                            } catch(err) {}
+                                        } else {
+                                            layer.msg('IP或者网关的设置存在错误，提交失败！', {
+                                                time: 3000,
+                                                icon: 2,
+                                                anim: 0,
+                                                skin: 'message',
+                                                shade: [0.5, '#393D49']
+                                            });
+                                        }
+                                    } else {
+                                        layer.msg('名称修改的内容超过了9个字，提交失败！', {
+                                            time: 3000,
+                                            icon: 2,
+                                            anim: 0,
+                                            skin: 'message',
+                                            shade: [0.5, '#393D49']
+                                        });
+                                    }
+                                } else {
+                                    layer.msg('网关格式有误，提交失败！', {
+                                        time: 3000,
+                                        icon: 2,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    });
+                                }
+                            } else {
+                                layer.msg('子网掩码格式有误，提交失败！', {
+                                    time: 3000,
+                                    icon: 2,
+                                    anim: 0,
+                                    skin: 'message',
+                                    shade: [0.5, '#393D49']
+                                });
+                            }
+                        } else {
+                            layer.msg('IP格式有误，提交失败！', {
+                                time: 3000,
+                                icon: 2,
+                                anim: 0,
+                                skin: 'message',
+                                shade: [0.5, '#393D49']
+                            });
+                        }
+                    } else {
+                        layer.msg('数据不能为空，提交失败！', {
+                            time: 3000,
+                            icon: 2,
+                            anim: 0,
+                            skin: 'message',
+                            shade: [0.5, '#393D49']
+                        });
+                    }
+                    return false;
+                })
+                /*第一个提交按钮 结束*/
+                /*第二个提交按钮 开始*/
+                form.on('submit(demo2)', function (data) {
+                    var on_off_second, on_off_third, parse_one,
+                        parse_one_open = $('#normalOpen').prop('checked'),
+                        parse_one_close = $('#normalClose').prop('checked'),
+                        parse_one_auto = $('#auto').prop('checked'),
+                        parse_two = $('#startOne').prop('checked'),
+                        parse_three = $('#startTwo').prop('checked'),
+                        parse_four = $('#timeOne').val(),
+                        parse_five = $('#timeTwo').val(),
+                        parse_six = $('#timeThree').val();
+                    if(parse_two == true) {
+                        on_off_second = 'on';
+                    } else {
+                        on_off_second = 'off';
+                    }
+                    if(parse_three == true) {
+                        on_off_third = 'on';
+                    } else {
+                        on_off_third = 'off';
+                    }
+                    if(parse_one_open == true) {
+                        parse_one = '0';
+                    } else if(parse_one_close == true) {
+                        parse_one = '1';
+                    } else {
+                        parse_one = '2';
+                    }
+                    try {
+                        if(parse_four == '' || parse_five == '' || parse_six == '') {
+                            layer.msg('数据不能空！', {
+                                time: 3000,
+                                icon: 2,
+                                anim: 0,
+                                skin: 'message',
+                                shade: [0.5, '#393D49']
+                            })
+                        } else {
+                            var parseFivearray, parseSixarray, fivearrayminussixarrayone, fivearrayminussixarraytwo, fivearrayminussixarraythree;
+                            parseFivearray = parse_five.split(':'),
+                                parseSixarray = parse_six.split(':'),
+                                fivearrayminussixarrayone = parseFivearray[0] - parseSixarray[0],
+                                fivearrayminussixarraytwo = parseFivearray[1] - parseSixarray[1],
+                                fivearrayminussixarraythree = parseFivearray[2] - parseSixarray[2];
+                            var result = parse_one + '&' + on_off_second + '&' + parse_four + '&' + on_off_third + '&' + parseSixarray[0] + '&' + parseSixarray[1] + '&' + parseSixarray[2] + '&' + parseFivearray[0] + '&' + parseFivearray[1] + '&' + parseFivearray[2];
+                            /*检验开机时间大于关机时间一分钟*/
+                            if(fivearrayminussixarrayone > 0) {
+                                var resultAll = protocal_set('localnet_work', result);
+                                if(resultAll.length < 1) {
+                                    throw " result count failure";
+                                } else {
+                                    if(resultAll[0] == 'ok') {
+                                        layer.msg('提交成功！', {
+                                            time: 3000,
+                                            icon: 1,
+                                            anim: 0,
+                                            skin: 'message',
+                                            shade: [0.5, '#393D49']
+                                        })
+                                    } else {
+                                        layer.msg('提交失败！', {
+                                            time: 3000,
+                                            icon: 2,
+                                            anim: 0,
+                                            skin: 'message',
+                                            shade: [0.5, '#393D49']
+                                        })
+                                    }
+                                }
+                            } else if(fivearrayminussixarrayone == 0 && fivearrayminussixarraytwo > 1) {
+                                var resultAll = protocal_set('localnet_work', result);
+                                if(resultAll.length < 1) {
+                                    throw " result count failure";
+                                } else {
+                                    if(resultAll[0] == 'ok') {
+                                        layer.msg('提交成功！', {
+                                            time: 3000,
+                                            icon: 1,
+                                            anim: 0,
+                                            skin: 'message',
+                                            shade: [0.5, '#393D49']
+                                        })
+                                    } else {
+                                        layer.msg('提交失败！', {
+                                            time: 3000,
+                                            icon: 2,
+                                            anim: 0,
+                                            skin: 'message',
+                                            shade: [0.5, '#393D49']
+                                        })
+                                    }
+                                }
+                            } else if(fivearrayminussixarrayone == 0 && fivearrayminussixarraytwo == 1 && fivearrayminussixarraythree >= 0) {
+                                var resultAll = protocal_set('localnet_work', result);
+                                if(resultAll.length < 1) {
+                                    throw " result count failure";
+                                } else {
+                                    if(resultAll[0] == 'ok') {
+                                        layer.msg('提交成功！', {
+                                            time: 3000,
+                                            icon: 1,
+                                            anim: 0,
+                                            skin: 'message',
+                                            shade: [0.5, '#393D49']
+                                        })
+                                    } else {
+                                        layer.msg('提交失败！', {
+                                            time: 3000,
+                                            icon: 2,
+                                            anim: 0,
+                                            skin: 'message',
+                                            shade: [0.5, '#393D49']
+                                        })
+                                    }
+                                }
+                            } else {
+                                layer.msg('时间范围输入错误！', {
+                                    time: 3000,
+                                    icon: 2,
+                                    anim: 0,
+                                    skin: 'message',
+                                    shade: [0.5, '#393D49']
+                                })
+                            }
+                            /*检验开机时间大于关机时间一分钟*/
+                        }
+                    } catch(err) {
+                        alert(err);
+                    }
+                    return false;
+                })
+                /*第二个提交按钮 结束*/
+                $("#totalStorageSpace,#haveBeenUsed,#usageRates").attr('disabled', 'disabled');
+                /*查看图片开始*/
+                $("#view_image").off('click').on('click', function () {
+                    if($('#imgs').attr('name') == 'test') {
+                        var result = protocal_get_one('test', null);
+                        /*var result = ['172.16.10.247','2 3 4.jpg','5 3.bmp','DEC_NOVIDEO_1080P.bmp',' '];*/
+                        try {
+                            if(result.length > 1) {
+                                for(var i = 1; i <= result.length - 2; i++) {
+                                    var testone = "http://" + result[0] + "/ImgFile/config/" + result[i];
+                                    /*var testone = "http://" + result[0] + "/ImgFile/config/" + result[i];*/
+                                    var imgHtml = "<div id='img'><div id='imgContainer'><img src='" + testone + "' name='chenshanqiang'></div><div id='buttonArray'><button class='layui-btn layui-btn-primary' id='delete'>" + "<i class='layui-icon layui-icon-delete'></i>删除</button><button class='layui-btn' id='choose'>" + "<i class='layui-icon layui-icon-ok'></i>选用</button><input name='chosen' type='text' " + "style='text-align: center;' class='layui-input' disabled></div></div>";
+                                    $("#imgs").append(imgHtml);
+                                }
+                            } else {}
+                            $('#imgs').attr('name', 'testOne');
+                            $('#view_image').html('关闭图片');
+                            var resultChooseStatus = protocal_get('picture', null);
+                            $("img").parent().next().children('input').val('未使用');
+                            $("img[src='http://" + result[0] + "/ImgFile/config/" + resultChooseStatus[0] + "']").parent().next().children('input').val('正在使用中');
+                            $("img[src='http://" + result[0] + "/ImgFile/config/" + resultChooseStatus[0] + "']").parent().next().children('input').css('color', 'red');
+                        } catch(err) {}
+                    } else {
+                        $('#imgs #img').remove();
+                        $('#imgs').attr('name', 'test');
+                        $('#view_image').html('查看图片');
+                    }
+                })
+                /*查看图片结束*/
+                /*图片删除*/
+                $(document).on('click', '#delete', function (event) {
+                    try {
+                        var imgsrc, imgsrcyuv, imgsrcArray, result;
+                        imgsrc = $(this).parent().prev().children().attr('src');
+                        imgsrcyuv = imgsrc.split('/');
+                        if(imgsrcyuv[5] != 'DEC_NOVIDEO_1080P.bmp') {
+                            imgsrcArray = imgsrc.split('/');
+                            var base = new Base64();
+                            var imgsrcArrayfive = base.encode(imgsrcArray[5]);
+                            result = protocal_set('del_pic', imgsrcArrayfive);
+                            if(result[0] == 'ok') {
+                                $('#imgs #img').remove();
+                                $('#imgs').attr('name', 'test');
+                                $('#view_image').html('查看图片');
+                                var resulpicwork = protocal_get_one("pic_work", null);
+                                if(resulpicwork.length < 3) {} else {
+                                    $('#totalStorageSpace').val(resulpicwork[0] + 'KB');
+                                    $('#haveBeenUsed').val(resulpicwork[1] + 'KB');
+                                    $('#usageRates').val(resulpicwork[2]);
+                                }
+                                layer.msg('此图片删除成功！', {
+                                    time: 3000,
+                                    icon: 1,
+                                    anim: 0,
+                                    skin: 'message',
+                                    shade: [0.5, '#393D49']
+                                });
+                            } else {
+                                layer.msg('删除失败！', {
+                                    time: 3000,
+                                    icon: 2,
+                                    anim: 0,
+                                    skin: 'message',
+                                    shade: [0.5, '#393D49']
+                                });
+                            }
+                        } else {
+                            layer.msg('此图片无法删除！', {
+                                time: 3000,
+                                icon: 5,
+                                anim: 0,
+                                skin: 'message',
+                                shade: [0.5, '#393D49']
+                            });
+                        }
+                    } catch(err) {}
+                })
+                /*图片选定开始*/
+                $(document).on('click', '#choose', function (event) {
+                    try {
+                        var imgsrc, imgsrcArray, result;
+                        imgsrc = $(this).parent().prev().children().attr('src');
+                        imgsrcArray = imgsrc.split('/');
+                        var base = new Base64();
+                        var imgsrcArrayfive = base.encode(imgsrcArray[5]);
+                        result = protocal_set('picture', imgsrcArrayfive);
+                        if(result[0] == 'ok') {
+                            $("img").parent().next().children('input').val('未使用');
+                            $("img").parent().next().children('input').css('color', '#3F3F3F');
+                            var resultChooseStatus = protocal_get('picture', null);
+                            var resultTwo = protocal_get_one('test', null);
+                            $("img[src='http://" + resultTwo[0] + "/ImgFile/config/" + resultChooseStatus[0] + "']").parent().next().children('input').val('正在使用中');
+                            $("img[src='http://" + resultTwo[0] + "/ImgFile/config/" + resultChooseStatus[0] + "']").parent().next().children('input').css('color', 'red');
+                        } else {
+                            layer.msg('选用失败！', {
+                                time: 3000,
+                                icon: 2,
+                                anim: 0,
+                                skin: 'message',
+                                shade: [0.5, '#393D49']
+                            });
+                        }
+                    } catch(err) {}
+                })
+                /*图片选定结束*/
+            })
+            /*图片上传开始*/
+            $(function () {
+                $("#upload").on("click", function () {
+                    var localImages = document.getElementById("file1");
+                    if(localImages.files[0]) {
+                        var imgformatone = localImages.files[0].name.indexOf(".");
+                        var imgformat = localImages.files[0].name.substring(imgformatone);
+                        if(imgformat != ".bmp") {
+                            layer.msg('只能上传bmp格式的图片！', { icon: 5 });
+                        } else {
+                            var f = localImages.files[0];
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                var data = e.target.result;
+                                //加载图片获取图片真实宽度和高度  
+                                var image = new Image();
+                                image.onload = function () {
+                                    if(image.width != 1920 && image.height != 1080) {
+                                        layer.msg('图片尺寸有误！', { icon: 5 });
+                                        return false;
+                                    }
+                                    var storageSpace = $('#totalStorageSpace').val(),
+                                        beenUsed = $('#haveBeenUsed').val();
+                                    var storageSpaceresult = storageSpace.substr(0, storageSpace.length - 2),
+                                        beenUsedresult = beenUsed.substr(0, beenUsed.length - 2);
+                                    var freeSpace = storageSpaceresult - beenUsedresult;
+                                    if(freeSpace * 1024 >= f.size) {
+                                        var indexone = top.layer.open({
+                                            title: false,
+                                            icon: 16,
+                                            content: '上传中...',
+                                            btn: 0,
+                                            closeBtn: 0
+                                        })
+                                        var formData = new FormData();
+                                        formData.append("myfile", document.getElementById("file1").files[0]);
+                                        $.ajax({
+                                            url: "cgi-bin/WebCGIImage.cgi",
+                                            type: "POST",
+                                            data: formData,
+                                            contentType: false,
+                                            processData: false,
+                                            success: function () {
+                                                var resulpicwork = protocal_get_one("pic_work", null);
+                                                if(resulpicwork.length < 3) {} else {
+                                                    $('#totalStorageSpace').val(resulpicwork[0] + 'KB');
+                                                    $('#haveBeenUsed').val(resulpicwork[1] + 'KB');
+                                                    $('#usageRates').val(resulpicwork[2]);
+                                                }
+                                                top.layer.msg('上传成功', {
+                                                    icon: 6,
+                                                    shade: [0.4, '#393D49']
+                                                }, function () {
+                                                    $('#imgs #img').remove();
+                                                    $('#imgs').attr('name', 'test');
+                                                    $('#view_image').html('查看图片');
+                                                });
+                                            },
+                                            error: function () {
+                                                top.layer.msg('请求失败！', {
+                                                    icon: 5,
+                                                    shade: [0.4, '#393D49']
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        top.layer.msg('剩余空间不足！', {
+                                            icon: 2,
+                                            shade: [0.4, '#393D49']
+                                        });
+                                    }
+                                };
+                                image.src = data;
+                            };
+                            reader.readAsDataURL(f);
+                        }
+                    } else {
+                        var indexone = top.layer.open({
+                            title: false,
+                            icon: 5,
+                            time: 2000,
+                            content: '没有选择图片,无法上传！',
+                            btn: 0,
+                            closeBtn: 0
+                        })
+                    }
+                })
+            })
+            /*图片上传结束*/
+            /*检测ip格式*/
+            function check_ip(id, id1) {
+                var str = document.getElementById(id).value;
+                if(str != '') {
+                    var reg = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
+                    if(!reg.test(str)) {
+                        document.getElementById(id1).style.display = "";
+                        document.getElementById(id1).innerHTML = "IP输入格式错误,请重新输入！";
+                    } else {
+                        document.getElementById(id1).style.display = "none";
+                    }
+                } else {
+                    document.getElementById(id1).innerHTML = "";
+                }
+            }
+            /*检测子网掩码格式*/
+            function checkSubnet(id, id1) {
+                var str = document.getElementById(id).value;
+                if(str != '') {
+                    var reg = /^(254|252|248|240|224|192|128)\.0\.0\.0|255\.(254|252|248|240|224|192|128|0)\.0\.0|255\.255\.(254|252|248|240|224|192|128|0)\.0|255\.255\.255\.(254|252|248|240|224|192|128|0)$/;
+                    if(!reg.test(str)) {
+                        document.getElementById(id1).style.display = "";
+                        document.getElementById(id1).innerHTML = "子网掩码输入格式错误，请重新输入！";
+                    } else {
+                        document.getElementById(id1).style.display = "none";
+                    }
+                } else {
+                    document.getElementById(id1).innerHTML = "";
+                }
+            }
+            /*检测网关格式*/
+            function gateWay(id, id1) {
+                var str = document.getElementById(id).value;
+                if(str != '') {
+                    var reg = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
+                    if(!reg.test(str)) {
+                        document.getElementById(id1).style.display = "";
+                        document.getElementById(id1).innerHTML = "网关输入格式错误，请重新输入！";
+                    } else {
+                        document.getElementById(id1).style.display = "none";
+                    }
+                } else {
+                    document.getElementById(id1).innerHTML = "";
+                }
+            }
+            /*检测Mac格式*/
+            function check_mac(id, id1) {
+                var str = document.getElementById(id).value;
+                var reg = /[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}/;
+                if(!reg.test(str)) {
+                    document.getElementById(id1).style.display = "";
+                    document.getElementById(id1).innerHTML = "MAC输入格式错误，请重新输入！"
+                } else {
+                    document.getElementById(id1).style.display = "none";
+                }
+            }
+            /* 验证延时关闭电源时间输入值*/
+            function checkTimeOne(param) {
+                var regTwotime = /(^[1-2][0-9]$)|(^30$)|(^[1-9]$)/;
+                var timeTwo = document.getElementById(param).value;
+                if(regTwotime.test(timeTwo) || timeTwo == '') {} else {
+                    document.getElementById(param).value = '';
+                }
+            }
+            /*验证延时开或关闭电源时间*/
+            function checkTimeTwo(param) {
+                var regOnetime = /^([0-1]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
+                var timeOne = document.getElementById(param).value;
+                if(regOnetime.test(timeOne) || timeOne == '') {} else {
+                    document.getElementById(param).value = '';
+                }
+            }
+            /*@description:将string转为UTF-8格式signed char字节数组 */
+            function stringToBytes(str) {
+                var bytes = new Array();
+                for(var i = 0; i < str.length; i++) {
+                    var c = str.charCodeAt(i);
+                    var s = parseInt(c).toString(2);
+                    if(c >= parseInt("000080", 16) && c <= parseInt("0007FF", 16)) {
+                        var af = "";
+                        for(var j = 0; j < (11 - s.length); j++) {
+                            af += "0";
+                        }
+                        af += s;
+                        var n1 = parseInt("110" + af.substring(0, 5), 2);
+                        var n2 = parseInt("110" + af.substring(5), 2);
+                        if(n1 > 127) n1 -= 256;
+                        if(n2 > 127) n2 -= 256;
+                        bytes.push(n1);
+                        bytes.push(n2);
+                    } else if(c >= parseInt("000800", 16) && c <= parseInt("00FFFF", 16)) {
+                        var af = "";
+                        for(var j = 0; j < (16 - s.length); j++) {
+                            af += "0";
+                        }
+                        af += s;
+                        var n1 = parseInt("1110" + af.substring(0, 4), 2);
+                        var n2 = parseInt("10" + af.substring(4, 10), 2);
+                        var n3 = parseInt("10" + af.substring(10), 2);
+                        if(n1 > 127) n1 -= 256;
+                        if(n2 > 127) n2 -= 256;
+                        if(n3 > 127) n3 -= 256;
+                        bytes.push(n1);
+                        bytes.push(n2);
+                        bytes.push(n3);
+                    } else if(c >= parseInt("010000", 16) && c <= parseInt("10FFFF", 16)) {
+                        var af = "";
+                        for(var j = 0; j < (21 - s.length); j++) {
+                            af += "0";
+                        }
+                        af += s;
+                        var n1 = parseInt("11110" + af.substring(0, 3), 2);
+                        var n2 = parseInt("10" + af.substring(3, 9), 2);
+                        var n3 = parseInt("10" + af.substring(9, 15), 2);
+                        var n4 = parseInt("10" + af.substring(15), 2);
+                        if(n1 > 127) n1 -= 256;
+                        if(n2 > 127) n2 -= 256;
+                        if(n3 > 127) n3 -= 256;
+                        if(n4 > 127) n4 -= 256;
+                        bytes.push(n1);
+                        bytes.push(n2);
+                        bytes.push(n3);
+                        bytes.push(n4);
+                    } else {
+                        bytes.push(c & 0xff);
+                    }
+                }
+                return bytes;
+            }
+        </script>
+    </body>
+</html>

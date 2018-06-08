@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>音视频一线通终端管理设置</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10,chrome=1">
+        <!-- Mobile Metas -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css/main.css"> </head>
+    <body>
+        <div class="x-nav">
+            <span class="layui-breadcrumb" lay-separator=">">
+                <a>
+                    <cite>首页</cite>
+                </a>
+                <a>
+                    <cite>管理员</cite>
+                </a>
+                <a>
+                    <cite>远程通信服务器</cite>
+                </a>
+            </span>
+            <a class="layui-btn layui-btn-sm" id="fresh" style="float: right;" href="javascript:location.replace(location.href);" title="刷新">
+                <i class="layui-icon layui-icon-refresh"></i>
+            </a>
+        </div>
+        <form class="layui-form layui-form-pane" style="margin-top: 20px;">
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">是否组播</label>
+                <div class="layui-input-block">
+                    <input type="radio" id='cstart' name="cstatus" lay-filter='radio' value="是" title="是">
+                    <input type="radio" id='cstop' name="cstatus" lay-filter='radio' value="否" title="否"> </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 50px;">
+                <label class="layui-form-label">IP</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" id='n_ip' autocomplete="off" placeholder="请输入IP地址" class="layui-input text-box"> </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">端口</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" id='n_port' autocomplete="off" placeholder="请输入端口号" class="layui-input text-box"> </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn  layui-btn-primary" lay-submit="" lay-filter="demo1">提交</button>
+            </div>
+        </form>
+        <script type="text/javascript" src="./js/jquery-3.2.1.js"></script>
+        <script type="text/javascript" src="./js/protocal.js"></script>
+        <script type="text/javascript" src="./js/security.js"></script>
+        <script type="text/javascript" src="./js/local_info.js"></script>
+        <script type="text/javascript" src="./layui/layui.js"></script>
+        <script type="text/javascript">
+            layui.use(['element', 'layer', 'form'], function () {
+                var form = layui.form,
+                    layer = layui.layer,
+                    $ = layui.jquery;
+                /*界面初始化数据开始*/
+                try {
+                    var resultone = protocal_get('servernet', null);
+                    /* var resultone = ['12', '233', 'off']*/
+                    if(resultone.length < 3) {
+                        //throw "servernet result count failure";
+                    } else {
+                        $('#n_ip').val(resultone[0]);
+                        $('#n_port').val(resultone[1]);
+                        if(resultone[2] == 'on') {
+                            $('#cstart').prop('checked', 'true');
+                        } else {
+                            $('#cstop').prop('checked', 'true');
+                        }
+                        form.render('radio');
+                    }
+                } catch(err) {}
+                /*界面初始化数据结束*/
+                /*监听radio单选开始 */
+                form.on('radio(radio)', function (data) {
+                    if(data.value == '是') {
+                        layer.open({
+                            title: ' ',
+                            icon: 3,
+                            content: '是否确定设置该功能？',
+                            btn: ['是', '否'],
+                            skin: "layui-layer-molv",
+                            closeBtn: 1,
+                            yes: function (index) {
+                                live_interactive_status('mul', 'on');
+                                layer.close(index);
+                                var result = protocal_set_resystem("reset", 'system');
+                                if(result[0] == 'ok') {
+                                    top.layer.open({
+                                        title: false,
+                                        icon: 6,
+                                        time: 250000,
+                                        content: '正在重启系统...',
+                                        btn: false,
+                                        skin: "layui-layer-molv",
+                                        closeBtn: 0,
+                                    })
+                                    setCookie("username", "", "pass", "");
+                                    setTimeout(function () {
+                                        window.parent.location.reload();
+                                    }, 25000);
+                                } else {
+                                    layer.msg('重启失败！', {
+                                        time: 3000,
+                                        icon: 2,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    });
+                                }
+                            },
+                            btn2: function (index) {
+                                $('#cstop').prop('checked', 'true');
+                                form.render('radio');
+                                layer.close(index);
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            title: ' ',
+                            icon: 3,
+                            content: '是否确定设置该功能？',
+                            btn: ['是', '否'],
+                            skin: "layui-layer-molv",
+                            closeBtn: 1,
+                            yes: function (index) {
+                                live_interactive_status('mul', 'off');
+                                layer.close(index);
+                                var result = protocal_set_resystem('reset', 'system');
+                                if(result[0] == 'ok') {
+                                    top.layer.open({
+                                        title: false,
+                                        icon: 6,
+                                        time: 250000,
+                                        content: '正在重启系统...',
+                                        btn: false,
+                                        skin: "layui-layer-molv",
+                                        closeBtn: 0,
+                                    })
+                                    setCookie("username", "", "pass", "");
+                                    setTimeout(function () {
+                                        window.parent.location.reload();
+                                    }, 25000);
+                                } else {
+                                    layer.msg('重启失败！', {
+                                        time: 3000,
+                                        icon: 2,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    });
+                                }
+                            },
+                            btn2: function (index) {
+                                $('#cstart').prop('checked', 'true');
+                                form.render('radio');
+                                layer.close(index);
+                            }
+                        });　
+                    }
+                })
+                /*监听radio单选结束*/
+                /* 监听提交开始*/
+                form.on('submit(demo1)', function (data) {
+                    var result_1 = $('#n_ip').val(),
+                        result_2 = $('#n_port').val();
+                    var reg = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
+                    var regPort = /^(700[1-9]|70[1-9]\d|7100)$/;
+                    if(result_1 != '' && result_2 != '') {
+                        if(reg.test(result_1)) {
+                            if(regPort.test(result_2)) {
+                                var result = result_1 + '&' + result_2;
+                                try {
+                                    var resultAll = protocal_set('servernet', result);
+                                    if(resultAll.length == 2) {
+                                        if(resultAll[0] == 'ok' && resultAll[1] == 'ok') layer.msg('提交成功！', {
+                                            time: 3000,
+                                            icon: 1,
+                                            anim: 0,
+                                            skin: 'message',
+                                            shade: [0.5, '#393D49']
+                                        });
+                                    } else if(resultAll.length == 3) {
+                                        if(resultAll[0] == 'ok' && resultAll[1] == 'ok' && resultAll[2] == 'ok') top.layer.open({
+                                            title: false,
+                                            icon: 6,
+                                            time: 250000,
+                                            content: '提交成功，正在重启系统...',
+                                            btn: false,
+                                            skin: "layui-layer-molv",
+                                            closeBtn: 0,
+                                        })
+                                        setCookie("username", "", "pass", "");
+                                        setTimeout(function () {
+                                            window.parent.location.reload();
+                                        }, 25000);
+                                    } else {
+                                        layer.msg('提交失败！', {
+                                            time: 3000,
+                                            icon: 2,
+                                            anim: 0,
+                                            skin: 'message',
+                                            shade: [0.5, '#393D49']
+                                        });
+                                    }
+                                } catch(err) {}
+                            } else {
+                                $('#n_port').val('');
+                                layer.msg('端口输入范围是7001-7100,请重新输入！', {
+                                    time: 3000,
+                                    icon: 2,
+                                    anim: 0,
+                                    skin: 'message',
+                                    shade: [0.5, '#393D49']
+                                });
+                            }
+                        } else {
+                            layer.msg('IP格式有误,提交失败！', {
+                                time: 3000,
+                                icon: 2,
+                                anim: 0,
+                                skin: 'message',
+                                shade: [0.5, '#393D49']
+                            });
+                        }
+                    } else {
+                        layer.msg('数据不能为空，提交失败！', {
+                            time: 3000,
+                            icon: 2,
+                            anim: 0,
+                            skin: 'message',
+                            shade: [0.5, '#393D49']
+                        });
+                    }
+                    return false;
+                });
+                /* 监听提交结束*/
+            });
+
+            function live_interactive_status(live_interactive, status) {
+                try {
+                    var result = protocal_set(live_interactive, status);
+                    if(result[0] == 'ok') {
+                        return false;
+                    } else {
+                        //throw comstatus + " result unkown error";
+                    }
+                } catch(err) {
+                    alert(err);
+                }
+            }
+        </script>
+    </body>
+</html>

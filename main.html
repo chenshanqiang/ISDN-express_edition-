@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>音视频一线通终端管理设置</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10,chrome=1">
+        <!-- Mobile Metas -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./css/main.css"> 
+        <link rel="stylesheet" type="text/css" href="./font-awesome/css/font-awesome.css"> 
+    </head>
+    <body onload="onloadmain()">
+        <div class="layui-layout layui-layout-admin">
+            <div class="layui-header header header-demo">
+                <div class="layui-main">
+                    <a style="display:inline-block;" class="logo" href="javascript:;">
+                        <img src="images/mainlog.png" style="height: 40px;"> </a>
+                    <div id='classNameMain' style='display:inline-block; color:#175B20; margin-left: 10%;font-size: 18px;font-weight:900;'> </div>
+                    <ul style="float: right;margin-top: 20px;" lay-filter="">
+                        <li class="layui-nav-item">
+                            <div style="display:inline-block;color: black;">
+                                <span id='user'></span>欢迎您&nbsp;!</div>
+                            <div style="display:inline-block;color:#20852C" id="status">系统未连接</div>
+                            <div id="exit" style="display:inline-block;color: black;margin-left:20px; cursor: pointer;" onmouseover="changeColor1()" onmouseleave="changeColor2()" onclick="exit()">退出</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="layui-side layui-bg-black x-side">
+                <div class="layui-side-scroll">
+                    <ul class="layui-nav layui-nav-tree site-demo-nav" lay-filter="side">
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a class="javascript:;" href="javascript:;" id="one" onclick="href_web('terminationState')">
+                            	<i class="fa fa-terminal fa-lg fa-fw" aria-hidden="true"></i>
+                                <cite>终端状态</cite>
+                            </a>
+                        </li>
+                        <li class="layui-nav-item">
+                            <a class="javascript:;" href="javascript:;" id="two" onclick="href_web('remoteCommunicationServer')">
+                                <i class="fa fa-server fa-lg fa-fw" aria-hidden="true"></i>
+                                <cite>远程通讯服务器</cite>
+                            </a>
+                        </li>
+                        <li class="layui-nav-item">
+                            <a class="javascript:;" href="javascript:;" id="three" onclick="href_web('nativeMachineConfiguration')">
+                                <i class="fa fa-cog fa-lg fa-fw" aria-hidden="true"></i>
+                                <cite>本机配置</cite>
+                            </a>
+                        </li>
+                        <li class="layui-nav-item">
+                            <a class="javascript:;" href="javascript:;" id="four" onclick="href_web('remoteUpgrade')">
+                                <i class="fa fa-sticky-note fa-lg fa-fw" aria-hidden="true"></i>
+                                <cite>系统升级</cite>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="layui-tab layui-tab-card site-demo-title x-main" lay-filter="x-tab" lay-allowclose="true">
+                <div class="x-slide_left"></div>
+                <div class="layui-tab-content site-demo site-demo-body">
+                    <div class="layui-tab-item layui-show">
+                        <iframe frameborder="0" name="main" src="terminationState.html" class="x-iframe" id="main-iframe"></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-footer footer" style=" height:40px;line-height: 40px; border-top: 4px solid #9F9F9F;">
+                <!-- 底部固定区域 -->版权所有©广州市迪士普智慧科技有限公司 </div>
+        </div>
+        <script type="text/javascript" src="./js/security.js"></script>
+        <script type="text/javascript" src="./js/protocal.js"></script>
+        <script type="text/javascript" src="./js/base64.js"></script>
+        <script type="text/javascript" src="./layui/layui.js"></script>
+        <script type="text/javascript">
+            layui.use(['element', 'layer'], function () {
+                var layer = layui.layer,
+                    $ = layui.jquery;
+                //导航的hover效果、二级菜单等功能，需要依赖element模块
+                // 侧边栏点击隐藏兄弟元素
+                $('.layui-nav-item').click(function (event) {
+                    $(this).siblings().removeClass('layui-nav-itemed');
+                });
+                $('.layui-tab-title li').eq(0).find('i').remove();
+                height = $('.layui-layout-admin .site-demo').height();
+                $('.layui-layout-admin .site-demo').height(height - 100);
+                if($(window).width() < 750) {
+                    trun = 0;
+                    $('.x-slide_left').css('background-position', '0px -61px');
+                } else {
+                    trun = 1;
+                }
+                $('.x-slide_left').click(function (event) {
+                    if(trun) {
+                        $('.x-side').animate({
+                            left: '-200px'
+                        }, 200).siblings('.x-main').animate({
+                            left: '0px'
+                        }, 200);
+                        $(this).css('background-position', '0px -61px');
+                        $('.layui-footer').css("margin-left", "-200px");
+                        trun = 0;
+                    } else {
+                        $('.x-side').animate({
+                            left: '0px'
+                        }, 200).siblings('.x-main').animate({
+                            left: '200px'
+                        }, 200);
+                        $(this).css('background-position', '0px 0px');
+                        $('.layui-footer').css("margin-left", "0px");
+                        trun = 1;
+                    }
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            //When the page is loaded, the function is executed      
+            function onloadmain() {
+                try {
+                    var userOne = getCookienameone("usernameone");
+                    document.getElementById('user').innerHTML = userOne;
+                    var base = new Base64();
+                    var result = protocal_get('main', null);
+                    if(result.length < 2) {
+                        //throw "servernet result count failure";
+                    } else {
+                        if(result[0] == '1') {
+                            document.getElementById('status').innerHTML = '系统已连接';
+                        } else {
+                            document.getElementById('status').innerHTML = '系统未连接';
+                        }
+                        var resultClassName = base.decode(result[1]);
+                        document.getElementById('classNameMain').innerHTML = resultClassName;
+                    }
+                } catch(err) {
+                    //alert(err);
+                }
+            }
+
+            function exit() {
+                location.href = './index.html';
+                setCookie("username", "", "pass", "", "usernameone", "", "passone", "");
+            }
+
+            function changeColor1() {
+                document.getElementById('exit').style.color = '#008D8F';
+            }
+
+            function changeColor2() {
+                document.getElementById('exit').style.color = 'black';
+            }
+
+            function href_web(parse) {
+                switch(parse) {
+                    case 'terminationState':
+                        document.getElementById('main-iframe').src = 'terminationState.html';
+                        break;
+                    case 'remoteCommunicationServer':
+                        document.getElementById('main-iframe').src = 'remoteCommunicationServer.html';
+                        break;
+                    case 'nativeMachineConfiguration':
+                        document.getElementById('main-iframe').src = 'nativeMachineConfiguration.html';
+                        break;
+                    case 'remoteUpgrade':
+                        document.getElementById('main-iframe').src = 'remoteUpgrade.html';
+                        break;
+                }
+            }
+        </script>
+    </body>
+</html>
