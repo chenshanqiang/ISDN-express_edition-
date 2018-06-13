@@ -94,12 +94,12 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">关机时间 </label>
                     <div class="layui-input-inline">
-                        <input type="text" onchange="checkTimeTwo('timeThree')" name="title" id="timeThree" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
+                        <input type="text" name="title" id="timeThree" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">开机时间 </label>
                     <div class="layui-input-inline">
-                        <input type="text" onchange="checkTimeTwo('timeTwo')" name="title" id="timeTwo" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
+                        <input type="text" name="title" id="timeTwo" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
                 </div>
                 <div class="layui-inline">
                     <div class="layui-form-mid layui-word-aux">注：只可设置当天的时间，不支持跨日设置</div>
@@ -152,9 +152,10 @@
         <script type="text/javascript" src="./layui/layui.js"></script>
         <script type="text/javascript" src="./js/base64.js"></script>
         <script type="text/javascript">
-            layui.use(['element', 'layer', 'form'], function () {
+            layui.use(['element', 'layer', 'form', 'laydate'], function () {
                 var form = layui.form,
                     layer = layui.layer,
+                    laydate = layui.laydate,
                     $ = layui.jquery;
                 /*radio监听事件开始*/
                 form.on('radio(radio)', function (data) {
@@ -234,8 +235,20 @@
                         $('#b_MAC').val(resulttwo[3]);
                         $('#b_name').val(name);
                         $('#timeOne').val(resulttwo[7]);
-                        $('#timeThree').val(resultArraytwo);
-                        $('#timeTwo').val(resultArraythree);
+                        laydate.render({
+                            elem: '#timeThree',
+                            type: 'time',
+                            format: 'HH:mm:ss',
+                            value: resultArraytwo,
+                            trigger: 'click'
+                        });
+                        laydate.render({
+                            elem: '#timeTwo',
+                            type: 'time',
+                            format: 'HH:mm:ss',
+                            value: resultArraythree,
+                            trigger: 'click'
+                        });
                         if(resulttwo[5] == '0') {
                             $('#normalOpen').prop('checked', ' ');
                             $('#startOne').attr('disabled', '');
@@ -776,14 +789,6 @@
                 var regTwotime = /(^[1-2][0-9]$)|(^30$)|(^[1-9]$)/;
                 var timeTwo = document.getElementById(param).value;
                 if(regTwotime.test(timeTwo) || timeTwo == '') {} else {
-                    document.getElementById(param).value = '';
-                }
-            }
-            /*验证延时开或关闭电源时间*/
-            function checkTimeTwo(param) {
-                var regOnetime = /^([0-1]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
-                var timeOne = document.getElementById(param).value;
-                if(regOnetime.test(timeOne) || timeOne == '') {} else {
                     document.getElementById(param).value = '';
                 }
             }
