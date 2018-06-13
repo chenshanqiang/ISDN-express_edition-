@@ -34,15 +34,17 @@
             <div class="layui-form-item" style="margin-top: 50px;">
                 <label class="layui-form-label">IP</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" id='n_ip' autocomplete="off" placeholder="请输入IP地址" class="layui-input text-box"> </div>
+                    <input type="text" name="ip" id='n_ip' lay-verify="required|ip" autocomplete="on" placeholder="请输入IP地址" class="layui-input"> </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">端口</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" id='n_port' autocomplete="off" placeholder="请输入端口号" class="layui-input text-box"> </div>
+                    <input type="text" name="port" id='n_port' lay-verify="required|port" autocomplete="on" placeholder="请输入端口号" class="layui-input"> </div>
             </div>
             <div class="layui-form-item">
+            	<div class="layui-input-block">
                 <button class="layui-btn  layui-btn-primary" lay-submit="" lay-filter="demo1">提交</button>
+               </div>
             </div>
         </form>
         <script type="text/javascript" src="./js/jquery-3.2.1.js"></script>
@@ -97,7 +99,7 @@
                                         skin: "layui-layer-molv",
                                         closeBtn: 0,
                                     })
-                                    setCookie("username", "", "pass", "");
+                                    setCookie("usernameone", "", "passone", "");
                                     setTimeout(function () {
                                         window.parent.location.reload();
                                     }, 25000);
@@ -139,7 +141,7 @@
                                         skin: "layui-layer-molv",
                                         closeBtn: 0,
                                     })
-                                    setCookie("username", "", "pass", "");
+                                    setCookie("usernameone", "", "passone", "");
                                     setTimeout(function () {
                                         window.parent.location.reload();
                                     }, 25000);
@@ -164,60 +166,33 @@
                 /*监听radio单选结束*/
                 /* 监听提交开始*/
                 form.on('submit(demo1)', function (data) {
-                    var result_1 = $('#n_ip').val(),
-                        result_2 = $('#n_port').val();
-                    var reg = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
-                    var regPort = /^(700[1-9]|70[1-9]\d|7100)$/;
-                    if(result_1 != '' && result_2 != '') {
-                        if(reg.test(result_1)) {
-                            if(regPort.test(result_2)) {
-                                var result = result_1 + '&' + result_2;
-                                try {
-                                    var resultAll = protocal_set('servernet', result);
-                                    if(resultAll.length == 2) {
-                                        if(resultAll[0] == 'ok' && resultAll[1] == 'ok') layer.msg('提交成功！', {
-                                            time: 3000,
-                                            icon: 1,
-                                            anim: 0,
-                                            skin: 'message',
-                                            shade: [0.5, '#393D49']
-                                        });
-                                    } else if(resultAll.length == 3) {
-                                        if(resultAll[0] == 'ok' && resultAll[1] == 'ok' && resultAll[2] == 'ok') top.layer.open({
-                                            title: false,
-                                            icon: 6,
-                                            time: 250000,
-                                            content: '提交成功，正在重启系统...',
-                                            btn: false,
-                                            skin: "layui-layer-molv",
-                                            closeBtn: 0,
-                                        })
-                                        setCookie("username", "", "pass", "");
-                                        setTimeout(function () {
-                                            window.parent.location.reload();
-                                        }, 25000);
-                                    } else {
-                                        layer.msg('提交失败！', {
-                                            time: 3000,
-                                            icon: 2,
-                                            anim: 0,
-                                            skin: 'message',
-                                            shade: [0.5, '#393D49']
-                                        });
-                                    }
-                                } catch(err) {}
-                            } else {
-                                $('#n_port').val('');
-                                layer.msg('端口输入范围是7001-7100,请重新输入！', {
-                                    time: 3000,
-                                    icon: 2,
-                                    anim: 0,
-                                    skin: 'message',
-                                    shade: [0.5, '#393D49']
-                                });
-                            }
+                    var result = data.field.ip + '&' + data.field.port;
+                    try {
+                        var resultAll = protocal_set('servernet', result);
+                        if(resultAll.length == 2) {
+                            if(resultAll[0] == 'ok' && resultAll[1] == 'ok') layer.msg('提交成功！', {
+                                time: 3000,
+                                icon: 1,
+                                anim: 0,
+                                skin: 'message',
+                                shade: [0.5, '#393D49']
+                            });
+                        } else if(resultAll.length == 3) {
+                            if(resultAll[0] == 'ok' && resultAll[1] == 'ok' && resultAll[2] == 'ok') top.layer.open({
+                                title: false,
+                                icon: 6,
+                                time: 250000,
+                                content: '提交成功，正在重启系统...',
+                                btn: false,
+                                skin: "layui-layer-molv",
+                                closeBtn: 0,
+                            })
+                            setCookie("usernameone", "", "passone", "");
+                            setTimeout(function () {
+                                window.parent.location.reload();
+                            }, 25000);
                         } else {
-                            layer.msg('IP格式有误,提交失败！', {
+                            layer.msg('提交失败！', {
                                 time: 3000,
                                 icon: 2,
                                 anim: 0,
@@ -225,18 +200,24 @@
                                 shade: [0.5, '#393D49']
                             });
                         }
-                    } else {
-                        layer.msg('数据不能为空，提交失败！', {
-                            time: 3000,
-                            icon: 2,
-                            anim: 0,
-                            skin: 'message',
-                            shade: [0.5, '#393D49']
-                        });
-                    }
+                    } catch(err) {}
                     return false;
                 });
                 /* 监听提交结束*/
+                form.verify({
+                    ip: function (value) {
+                        var reg = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
+                        if(!reg.test(value)) {
+                            return "IP输入错误！";
+                        }
+                    },
+                    port: function (value) {
+                        var regPort = /^(700[1-9]|70[1-9]\d|7100)$/;
+                        if(!regPort.test(value)) {
+                            return "端口输入范围是7001-7100,请重新输入！";
+                        }
+                    }
+                })
             });
 
             function live_interactive_status(live_interactive, status) {
