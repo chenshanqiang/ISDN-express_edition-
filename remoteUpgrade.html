@@ -29,7 +29,7 @@
                     <cite>系统升级</cite>
                 </a>
             </span>
-            <a class="layui-btn layui-btn-sm" style="float: right;" onclick="security()" href="javascript:void(0);" title="刷新">
+            <a class="layui-btn layui-btn-sm" id="fresh" style="float: right;" onclick="security()" href="javascript:void(0);" title="刷新">
                 <i class="layui-icon layui-icon-refresh"></i>
             </a>
         </div>
@@ -42,8 +42,8 @@
                 </div>
                 <div class="layui-inline">
                     <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-primary" style="color:#000;" lay-submit="" lay-filter="reset">重启系统</button>
-                        <button class="layui-btn layui-btn-primary" style="color:#000;" lay-submit="" lay-filter="factory_reset">恢复出厂设置</button>
+                        <div id="reset" class="layui-btn layui-btn-primary" lay-submit="" lay-filter="reset">重启系统</div>
+                        <div id='factory_reset' class="layui-btn layui-btn-primary" lay-submit="" lay-filter="factory_reset">恢复出厂设置</div>
                     </div>
                 </div>
             </div>
@@ -173,10 +173,9 @@
                             var timer = setInterval(function () {
                                 try {
                                     var resultResult = protocal_get_one("UPGRADENOW", null);
-                                    /*var resultResult = ['UPGRADENOW'];*/
+                                    /*var resultResult = ['FAILED'];*/
                                     switch(resultResult[0]) {
                                         case 'SUCCESS':
-                                            $('#fresh').attr('href', 'javascript:location.replace(location.href);');
                                             layer.open({
                                                 title: ' ',
                                                 icon: 6,
@@ -205,7 +204,6 @@
                                             clearInterval(timer);
                                             break;
                                         case 'FAILED':
-                                            $('#fresh').attr('href', 'javascript:location.replace(location.href);');
                                             layer.open({
                                                 title: ' ',
                                                 icon: 5,
@@ -215,12 +213,12 @@
                                                 closeBtn: 1,
                                                 yes: function (index) {
                                                     layer.close(index);
+                                                    location.reload();
                                                 },
                                             });
                                             clearInterval(timer);
                                             break;
                                         case 'NONEEDUPGRADE':
-                                            $('#fresh').attr('href', 'javascript:location.replace(location.href);');
                                             layer.open({
                                                 title: ' ',
                                                 icon: 6,
@@ -230,6 +228,7 @@
                                                 closeBtn: 1,
                                                 yes: function (index) {
                                                     layer.close(index);
+                                                    location.reload();
                                                 },
                                             });　
                                             clearInterval(timer);
@@ -273,10 +272,16 @@
                                             document.getElementById("file1").className = 'layui-btn-disabled';
                                             document.getElementById("upload").className = 'layui-btn-disabled';
                                             document.getElementById("file1").onclick = '';
+                                            $('#reset').prop('class','layui-btn layui-btn-disabled');
+                                            $('#factory_reset').prop('class','layui-btn layui-btn-disabled');
+                                            $('#reset').removeAttr('lay-filter');
+                                            $('#factory_reset').removeAttr('lay-filter');
+                                            $('#reset').removeAttr('lay-submit');
+                                            $('#factory_reset').removeAttr('lay-submit');
                                             $("#upload").off("click");
                                             document.getElementById("btn").onclick = '';
+                                            document.getElementById("fresh").onclick = '';
                                             submitstatus('updating', '升级中...');
-                                            $('#fresh').removeAttr('href');
                                             window.parent.document.getElementById('one').onclick = '';
                                             window.parent.document.getElementById('two').onclick = '';
                                             window.parent.document.getElementById('three').onclick = '';
