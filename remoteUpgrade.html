@@ -8,12 +8,12 @@
         <link rel="stylesheet" href="./css/main.css">
         <style type="text/css">
             label {
-                /*margin-left: 20px;*/
+                margin-left: 20px;
                 min-width: 140px !important;
             }
-            /*#file1, #btn {
+            #file1, #btn {
                 margin-left: 20px;
-            }*/
+            }
         </style>
     </head>
     <body>
@@ -33,9 +33,8 @@
                 <i class="layui-icon layui-icon-refresh"></i>
             </a>
         </div>
-        <form class="layui-form layui-form-pane" style="padding-left:1% ;padding-right:1% ;padding-top:1%;">
-            <!--style="margin-top: 2%;"-->
-            <div class="layui-form-item">
+        <form class="layui-form layui-form-pane">
+            <div class="layui-form-item" style="margin-top: 2%;">
                 <div class="layui-inline">
                     <label class="layui-form-label lable-auto">当前系统版本号</label>
                     <div class="layui-input-inline">
@@ -48,32 +47,16 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item" style="margin-left: 2%;">
                 <div class="layui-form-mid layui-word-aux">注释：请填写6到12位密码</div>
             </div>
         </form>
-        <fieldset class="layui-elem-field layui-field-box">
-            <legend>升级</legend>
-            <div class="layui-upload">
-                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择升级文件</button>
-                <div class="layui-upload-list">
-                    <table class="layui-table">
-                        <thead>
-                            <tr>
-                                <th>文件名</th>
-                                <th>大小</th>
-                                <th>状态</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="demoList"></tbody>
-                    </table>
-                </div>
-                <button type="button" class="layui-btn" id="testListAction">开始上传升级文件</button>
-                <button type="button" class="layui-btn" id="btn">升级</button>
-                <span style="color:red;" id="updating">正在升级</span>
-            </div>
-        </fieldset>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;"> </fieldset>
+        <input type="file" id="file1" value="选择升级文件" title="选择升级文件">
+        <input type="button" id="upload" value="上传升级文件" />
+        <span style="display:none;color:red;" id="imgWait">上传升级文件中...</span>
+        <input type="button" onclick="update_system()" value="升级" class="btn" id="btn">
+        <span style="color:red;" id="updating"></span>
         <script type="text/javascript" src="./js/forbid_backspace.js"></script>
         <script type="text/javascript" src="./js/jquery-3.2.1.js"></script>
         <script type="text/javascript" src="./js/update.js"></script>
@@ -96,218 +79,6 @@
                 } catch(err) {
                     //alert(err);
                 }
-                //多文件列表示例
-                var demoListView = $('#demoList'),
-                    uploadListIns = upload.render({
-                        elem: '#testList',
-                        url: './upfile.php',
-                        accept: 'file',
-                        multiple: true,
-                        number: 1,
-                        auto: false,
-                        bindAction: '#testListAction',
-                        choose: function (obj) {
-                            var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-                            //读取本地文件
-                            obj.preview(function (index, file, result) {
-                                var tr = $(['<tr id="upload-' + index + '">', '<td>' + file.name + '</td>', '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>', '<td>等待上传</td>', '<td>', '<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>', '<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>', '</td>', '</tr>'].join(''));
-                                //单个重传
-                                tr.find('.demo-reload').on('click', function () {
-                                    obj.upload(index, file);
-                                });
-                                //删除
-                                tr.find('.demo-delete').on('click', function () {
-                                    delete files[index]; //删除对应的文件
-                                    tr.remove();
-                                    uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                                });
-                                demoListView.html(tr);
-                            });
-                        },
-                        before: function (obj) {
-                        	console.log(demoListView);
-                            layer.load(1, { shade: [0.2, '#393D49'] });
-                        },
-                        done: function (res, index, upload) {
-                        	layer.closeAll('loading');
-                            if(res.code == 1) {
-                                var tr = demoListView.find('tr#upload-' + index),
-                                    tds = tr.children();
-                                tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                                tds.eq(3).html('');
-                                return delete this.files[index];
-                            }
-                            this.error(index, upload);
-                        },
-                        error: function (index, upload) {
-                            layer.closeAll('loading');
-                            var tr = demoListView.find('tr#upload-' + index),
-                                tds = tr.children();
-                            tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-                            tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
-                        }
-                    });
-                $('#btn').on('click', function () {
-                    var value = $('#demoList').find('tr').eq(0).children().eq(0).html();
-                    try {
-                        if(value != undefined) {
-                            var result = protocal_set_one('update', value);
-                            /*var result = ['UPGRADENOW'];*/
-                            if(result[0] == 'UPGRADENOW') {
-                                var timer = setInterval(function () {
-                                    try {
-                                        var resultResult = protocal_get_one("UPGRADENOW", null);
-                                        /*var resultResult = ['FAILED'];*/
-                                        switch(resultResult[0]) {
-                                            case 'SUCCESS':
-                                                layer.open({
-                                                    title: ' ',
-                                                    icon: 6,
-                                                    content: '升级成功！',
-                                                    btn: '关闭',
-                                                    skin: "layui-layer-molv",
-                                                    closeBtn: 1,
-                                                    yes: function (index) {
-                                                        layer.close(index);
-                                                        top.layer.open({
-                                                            title: false,
-                                                            icon: 6,
-                                                            time: 160000,
-                                                            content: '系统重启中...',
-                                                            btn: false,
-                                                            skin: "layui-layer-molv",
-                                                            closeBtn: 0,
-                                                        })
-                                                        clearInterval(timer);
-                                                        setCookie("usernameone", "", "passone", "");
-                                                        setTimeout(function () {
-                                                            window.parent.location.reload();
-                                                        }, 15000);
-                                                    },
-                                                });
-                                                clearInterval(timer);
-                                                break;
-                                            case 'FAILED':
-                                                layer.open({
-                                                    title: ' ',
-                                                    icon: 5,
-                                                    content: '升级失败！',
-                                                    btn: '关闭',
-                                                    skin: "layui-layer-molv",
-                                                    closeBtn: 1,
-                                                    yes: function (index) {
-                                                        layer.close(index);
-                                                        location.reload();
-                                                    },
-                                                });
-                                                clearInterval(timer);
-                                                break;
-                                            case 'NONEEDUPGRADE':
-                                                layer.open({
-                                                    title: ' ',
-                                                    icon: 6,
-                                                    content: '已为最新版本无需更新！',
-                                                    btn: '关闭',
-                                                    skin: "layui-layer-molv",
-                                                    closeBtn: 1,
-                                                    yes: function (index) {
-                                                        layer.close(index);
-                                                        location.reload();
-                                                    },
-                                                });　
-                                                clearInterval(timer);
-                                                break;
-                                            case 'UPMAINROOTFS':
-                                                top.layer.open({
-                                                    title: false,
-                                                    icon: 6,
-                                                    time: 300000,
-                                                    content: '升级主分区文件系统，系统正在重启，约等待3-4分钟升级完毕！',
-                                                    btn: false,
-                                                    skin: "layui-layer-molv",
-                                                    closeBtn: 0,
-                                                })
-                                                clearInterval(timer);
-                                                setCookie("usernameone", "", "passone", "");
-                                                setTimeout(function () {
-                                                    window.parent.location.reload();
-                                                }, 200000);
-                                                clearInterval(timer);
-                                                break;
-                                            case 'NEEDMAINUP':
-                                                top.layer.open({
-                                                    title: false,
-                                                    icon: 6,
-                                                    time: 240000,
-                                                    content: '部分模块升级失败，正在升级系统，约等待3-4分钟升级结束，之后系统自动重启！',
-                                                    btn: false,
-                                                    skin: "layui-layer-molv",
-                                                    closeBtn: 0,
-                                                })
-                                                clearInterval(timer);
-                                                setCookie("usernameone", "", "passone", "");
-                                                setTimeout(function () {
-                                                    window.parent.location.reload();
-                                                }, 240000);
-                                                clearInterval(timer);
-                                                break;
-                                            case 'UPGRADENOW':
-                                                document.getElementById("btn").className = 'btn layui-btn-disabled';
-                                                document.getElementById("file1").className = 'layui-btn-disabled';
-                                                document.getElementById("upload").className = 'layui-btn-disabled';
-                                                document.getElementById("file1").onclick = '';
-                                                $('#reset').prop('class', 'layui-btn layui-btn-disabled');
-                                                $('#factory_reset').prop('class', 'layui-btn layui-btn-disabled');
-                                                $('#reset').removeAttr('lay-filter');
-                                                $('#factory_reset').removeAttr('lay-filter');
-                                                $('#reset').removeAttr('lay-submit');
-                                                $('#factory_reset').removeAttr('lay-submit');
-                                                $("#upload").off("click");
-                                                document.getElementById("btn").onclick = '';
-                                                document.getElementById("fresh").onclick = '';
-                                                submitstatus('updating', '升级中...');
-                                                window.parent.document.getElementById('one').onclick = '';
-                                                window.parent.document.getElementById('two').onclick = '';
-                                                window.parent.document.getElementById('three').onclick = '';
-                                                window.parent.document.getElementById('four').onclick = '';
-                                                window.parent.document.getElementById('exit').onclick = '';
-                                                setTimeout("cls_content()", 1360);
-                                                break;
-                                        }
-                                    } catch(err) {
-                                        //alert(err);
-                                    }
-                                }, 1500);
-                            } else if(result[0] == 'FILE_ERROR') {
-                                top.layer.open({
-                                    title: '',
-                                    content: '错误升级文件！',
-                                    icon: 7,
-                                    btn: '关闭',
-                                    closeBtn: 0,
-                                    yes: function (index) {
-                                        top.layer.close(index);
-                                    }
-                                });
-                            } else {
-                                throw 'result is error';
-                            }
-                        } else {
-                            top.layer.open({
-                                title: '',
-                                content: '没有上传升级文件，无法升级！',
-                                icon: 7,
-                                btn: '关闭',
-                                closeBtn: 0,
-                                yes: function (index) {
-                                    top.layer.close(index);
-                                }
-                            });
-                        }
-                    } catch(err) {
-                        alert(err);
-                    }
-                })
                 form.on('submit(reset)', function (data) {
                     comfunc("reset", 'system', '正在重启系统...', '重启失败！');
                     return false;
@@ -328,6 +99,56 @@
                         }
                     });
                     return false;
+                });
+            });
+            /*
+             * 获得当前系统版本号
+             * */
+            $(function () {
+                $("#upload").on("click", function () {
+                    /*文件上传开始*/
+                    var localFiles = document.getElementById("file1").files[0];
+                    if(localFiles) {
+                        var indexone = top.layer.open({
+                            title: false,
+                            icon: 16,
+                            content: '上传中...',
+                            btn: 0,
+                            closeBtn: 0
+                        })
+                        var formData = new FormData();
+                        formData.append("myfile", localFiles);
+                        $.ajax({
+                            url: "cgi-bin/uploadcgi.cgi",
+                            type: "POST",
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function () {
+                                top.layer.msg('上传成功', {
+                                    icon: 6,
+                                    skin: 'message',
+                                    shade: [0.4, '#393D49']
+                                });
+                            },
+                            error: function () {
+                                top.layer.msg('上传失败', {
+                                    icon: 5,
+                                    shade: [0.4, '#393D49']
+                                });
+                            }
+                        });
+                    } else {
+                        var indexone = top.layer.open({
+                            title: false,
+                            icon: 5,
+                            time: 2000,
+                            content: '没有选择文件,无法上传！',
+                            btn: 0,
+                            closeBtn: 0
+                        })
+                    }
+                    /*文件上传结束*/
                 });
             });
 
@@ -353,6 +174,251 @@
                         anim: 0,
                         skin: 'message'
                     });
+                }
+            }
+            /*
+             * 系统升级
+             * */
+            function update_system() {
+                var value = document.getElementById('file1').value;
+                var value_one = value.split('\\');
+                var value_final = value_one[value_one.length - 1];
+                try {
+                    if(value_final != '') {
+                        var result = protocal_set_one('update', value_final);
+                        /*var result = ['UPGRADENOW'];*/
+                        if(result[0] == 'UPGRADENOW') {
+                            var timer = setInterval(function () {
+                                try {
+                                    var resultResult = protocal_get_one("UPGRADENOW", null);
+                                    /*var resultResult = ['FAILED'];*/
+                                    switch(resultResult[0]) {
+                                        case 'SUCCESS':
+                                            layer.open({
+                                                title: ' ',
+                                                icon: 6,
+                                                content: '升级成功！',
+                                                btn: '关闭',
+                                                skin: "layui-layer-molv",
+                                                closeBtn: 1,
+                                                yes: function (index) {
+                                                    layer.close(index);
+                                                    top.layer.open({
+                                                        title: false,
+                                                        icon: 6,
+                                                        time: 160000,
+                                                        content: '系统重启中...',
+                                                        btn: false,
+                                                        skin: "layui-layer-molv",
+                                                        closeBtn: 0,
+                                                    })
+                                                    clearInterval(timer);
+                                                    setCookie("usernameone", "", "passone", "");
+                                                    setTimeout(function () {
+                                                        window.parent.location.reload();
+                                                    }, 15000);
+                                                },
+                                            });
+                                            clearInterval(timer);
+                                            break;
+                                        case 'FAILED':
+                                            layer.open({
+                                                title: ' ',
+                                                icon: 5,
+                                                content: '升级失败！',
+                                                btn: '关闭',
+                                                skin: "layui-layer-molv",
+                                                closeBtn: 1,
+                                                yes: function (index) {
+                                                    layer.close(index);
+                                                    location.reload();
+                                                },
+                                            });
+                                            clearInterval(timer);
+                                            break;
+                                        case 'NONEEDUPGRADE':
+                                            layer.open({
+                                                title: ' ',
+                                                icon: 6,
+                                                content: '已为最新版本无需更新！',
+                                                btn: '关闭',
+                                                skin: "layui-layer-molv",
+                                                closeBtn: 1,
+                                                yes: function (index) {
+                                                    layer.close(index);
+                                                    location.reload();
+                                                },
+                                            });　
+                                            clearInterval(timer);
+                                            break;
+                                        case 'UPMAINROOTFS':
+                                            top.layer.open({
+                                                title: false,
+                                                icon: 6,
+                                                time: 300000,
+                                                content: '升级主分区文件系统，系统正在重启，约等待3-4分钟升级完毕！',
+                                                btn: false,
+                                                skin: "layui-layer-molv",
+                                                closeBtn: 0,
+                                            })
+                                            clearInterval(timer);
+                                            setCookie("usernameone", "", "passone", "");
+                                            setTimeout(function () {
+                                                window.parent.location.reload();
+                                            }, 200000);
+                                            clearInterval(timer);
+                                            break;
+                                        case 'NEEDMAINUP':
+                                            top.layer.open({
+                                                title: false,
+                                                icon: 6,
+                                                time: 240000,
+                                                content: '部分模块升级失败，正在升级系统，约等待3-4分钟升级结束，之后系统自动重启！',
+                                                btn: false,
+                                                skin: "layui-layer-molv",
+                                                closeBtn: 0,
+                                            })
+                                            clearInterval(timer);
+                                            setCookie("usernameone", "", "passone", "");
+                                            setTimeout(function () {
+                                                window.parent.location.reload();
+                                            }, 240000);
+                                            clearInterval(timer);
+                                            break;
+                                        case 'UPGRADENOW':
+                                            document.getElementById("btn").className = 'btn layui-btn-disabled';
+                                            document.getElementById("file1").className = 'layui-btn-disabled';
+                                            document.getElementById("upload").className = 'layui-btn-disabled';
+                                            document.getElementById("file1").onclick = '';
+                                            $('#reset').prop('class', 'layui-btn layui-btn-disabled');
+                                            $('#factory_reset').prop('class', 'layui-btn layui-btn-disabled');
+                                            $('#reset').removeAttr('lay-filter');
+                                            $('#factory_reset').removeAttr('lay-filter');
+                                            $('#reset').removeAttr('lay-submit');
+                                            $('#factory_reset').removeAttr('lay-submit');
+                                            $("#upload").off("click");
+                                            document.getElementById("btn").onclick = '';
+                                            document.getElementById("fresh").onclick = '';
+                                            submitstatus('updating', '升级中...');
+                                            window.parent.document.getElementById('one').onclick = '';
+                                            window.parent.document.getElementById('two').onclick = '';
+                                            window.parent.document.getElementById('three').onclick = '';
+                                            window.parent.document.getElementById('four').onclick = '';
+                                            window.parent.document.getElementById('exit').onclick = '';
+                                            setTimeout("cls_content()", 1360);
+                                            break;
+                                        case 'FAILED_RETRY':
+                                            $('#fresh').attr('href', 'javascript:void(0);');
+                                            submitstatus('updating', '升级失败，正在重试...！');
+                                            clearInterval(timer);
+                                            break;
+                                        case 'TOOSNOTENOUGH':
+                                            $('#fresh').attr('href', 'javascript:void(0);');
+                                            top.layer.open({
+                                                title: ' ',
+                                                icon: 5,
+                                                content: '升级失败,缺少必要文件！',
+                                                btn: '关闭',
+                                                skin: "layui-layer-molv",
+                                                closeBtn: 1,
+                                                yes: function (index) {
+                                                    window.parent.location.reload();
+                                                    top.layer.close(index);
+                                                },
+                                            });　
+                                            clearInterval(timer);
+                                            break;
+                                        case 'FAILED_RESTORE':
+                                            $('#fresh').attr('href', 'javascript:void(0);');
+                                            top.layer.open({
+                                                title: ' ',
+                                                icon: 5,
+                                                content: '升级失败！',
+                                                btn: '关闭',
+                                                skin: "layui-layer-molv",
+                                                closeBtn: 0,
+                                                yes: function (index) {
+                                                    layer.close(index);
+                                                    top.layer.open({
+                                                        title: false,
+                                                        icon: 6,
+                                                        time: 160000,
+                                                        content: '系统重启中...',
+                                                        btn: false,
+                                                        skin: "layui-layer-molv",
+                                                        closeBtn: 0,
+                                                    })
+                                                    clearInterval(timer);
+                                                    setCookie("usernameone", "", "passone", "");
+                                                    setTimeout(function () {
+                                                        window.parent.location.reload();
+                                                    }, 15000);
+                                                },
+                                            });
+                                            clearInterval(timer);
+                                            break;
+                                        case 'UPUPGRADEPRO':
+                                            $('#fresh').attr('href', 'javascript:void(0);');
+                                            top.layer.open({
+                                                title: ' ',
+                                                icon: 6,
+                                                content: '升级成功，系统即将重启！',
+                                                btn: '关闭',
+                                                skin: "layui-layer-molv",
+                                                closeBtn: 0,
+                                                yes: function (index) {
+                                                    layer.close(index);
+                                                    top.layer.open({
+                                                        title: false,
+                                                        icon: 6,
+                                                        time: 160000,
+                                                        content: '系统重启中...',
+                                                        btn: false,
+                                                        skin: "layui-layer-molv",
+                                                        closeBtn: 0,
+                                                    })
+                                                    clearInterval(timer);
+                                                    setCookie("usernameone", "", "passone", "");
+                                                    setTimeout(function () {
+                                                        window.parent.location.reload();
+                                                    }, 15000);
+                                                },
+                                            });
+                                            clearInterval(timer);
+                                            break;
+                                    }
+                                } catch(err) {
+                                    //alert(err);
+                                }
+                            }, 1500);
+                        } else if(result[0] == 'FILE_ERROR') {
+                            top.layer.open({
+                                title: '',
+                                content: '错误升级文件！',
+                                icon: 7,
+                                btn: '关闭',
+                                closeBtn: 0,
+                                yes: function (index) {
+                                    top.layer.close(index);
+                                }
+                            });
+                        } else {
+                            throw 'result is error';
+                        }
+                    } else {
+                        top.layer.open({
+                            title: '',
+                            content: '没有上传升级文件，无法升级！',
+                            icon: 7,
+                            btn: '关闭',
+                            closeBtn: 0,
+                            yes: function (index) {
+                                top.layer.close(index);
+                            }
+                        });
+                    }
+                } catch(err) {
+                    alert(err);
                 }
             }
 
