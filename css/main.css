@@ -168,16 +168,16 @@ body .site-demo-nav .layui-nav-item {
 	.header .layui-nav .layui-nav-item a {
 		padding: 0 15px;
 	}
-	.layui-layout-admin .layui-side {
+	/*.layui-layout-admin .layui-side {
 		position: fixed;
 		top: 0;
 		left: -260px;
 		transition: all .3s;
 		-webkit-transition: all .3s;
 		z-index: 10000;
-	}
-	.site-demo-title {
+	}*/
+	/*.site-demo-title {
 		left: 0;
-	}
+	}*/
 	/*.x-slide_left{display: none;}*/
 }

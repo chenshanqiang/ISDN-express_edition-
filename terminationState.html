@@ -6,14 +6,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="./css/main.css">
-        <style type="text/css">
-            .left, .right {
-                margin: 0 auto;
-            }
-            #leftGongfangBtn, #rightGongfangBtn, #leftGongfangBtnText, #rightGongfangBtnText {
-                text-align: center;
-            }
-        </style>
     </head>
     <body>
         <div class="x-nav">
@@ -28,7 +20,7 @@
                     <cite>终端状态</cite>
                 </a>
             </span>
-            <a class="layui-btn layui-btn-sm" style="float: right;" onclick="security()" href="javascript:void(0);" title="刷新">
+            <a class="layui-btn layui-btn-sm" style="float: right;" onclick="freThisPaper()" href="javascript:void(0);" title="刷新">
                 <i class="layui-icon layui-icon-refresh"></i>
             </a>
         </div>
@@ -45,7 +37,7 @@
                     <td colspan="2" style="text-align: center;" id="termination"></td>
                 </tr>
                 <tr class="table_all" id="tr_currentSource">
-                    <td>当前播放音源</td>
+                    <td>当前播放节目源</td>
                     <td colspan="2" style="text-align: center;" id="currentSource"></td>
                 </tr>
                 <tr class="table_all" id="leftGongfang">
@@ -75,6 +67,7 @@
                 </tr>
             </tbody>
         </table>
+        <script type="text/javascript" src="./js/forbid_backspace.js"></script>
         <script type="text/javascript" src="./js/protocal.js"></script>
         <script type="text/javascript" src="./js/security.js"></script>
         <script type="text/javascript" src="./js/jquery-3.2.1.js"></script>
@@ -121,6 +114,14 @@
                                 document.getElementById('termination').innerHTML = '消防广播';
                                 document.getElementById('currentSource').innerHTML = ' ';
                                 break;
+                            case '1000':
+                                document.getElementById('termination').innerHTML = '音频采集';
+                                document.getElementById('currentSource').innerHTML = ' ';
+                                break;  
+                            case '2000':
+                                document.getElementById('termination').innerHTML = '视频采集';
+                                document.getElementById('currentSource').innerHTML = ' ';
+                                break;    
                         }
                     }
                     /*获取左功放状态*/

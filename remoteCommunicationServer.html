@@ -20,16 +20,15 @@
                     <cite>远程通信服务器</cite>
                 </a>
             </span>
-            <a class="layui-btn layui-btn-sm" style="float: right;" onclick="security()" href="javascript:void(0);" title="刷新">
+            <a class="layui-btn layui-btn-sm" style="float: right;" onclick="freThisPaper()" href="javascript:void(0);" title="刷新">
                 <i class="layui-icon layui-icon-refresh"></i>
             </a>
         </div>
-        <form class="layui-form layui-form-pane" style="margin-top: 20px;">
+        <form class="layui-form layui-form-pane" lay-filter="example" style="margin-top: 20px;">
             <div class="layui-form-item" pane="">
                 <label class="layui-form-label">是否组播</label>
                 <div class="layui-input-block">
-                    <input type="radio" id='cstart' name="cstatus" lay-filter='radio' value="是" title="是">
-                    <input type="radio" id='cstop' name="cstatus" lay-filter='radio' value="否" title="否"> </div>
+                    <input name="cstatus" title="开关" id='cstatus' type="checkbox" checked="" lay-skin="switch" lay-text="是|否" lay-filter="switchTest"> </div>
             </div>
             <div class="layui-form-item" style="margin-top: 50px;">
                 <label class="layui-form-label">IP</label>
@@ -42,11 +41,12 @@
                     <input type="text" name="port" id='n_port' lay-verify="required|port" autocomplete="on" placeholder="请输入端口号" class="layui-input"> </div>
             </div>
             <div class="layui-form-item">
-            	<div class="layui-input-block">
-                <button class="layui-btn  layui-btn-primary" lay-submit="" lay-filter="demo1">提交</button>
-               </div>
+                <div class="layui-input-block">
+                    <button class="layui-btn  layui-btn-primary" lay-submit="" lay-filter="demo1">提交</button>
+                </div>
             </div>
         </form>
+        <script type="text/javascript" src="./js/forbid_backspace.js"></script>
         <script type="text/javascript" src="./js/jquery-3.2.1.js"></script>
         <script type="text/javascript" src="./js/protocal.js"></script>
         <script type="text/javascript" src="./js/security.js"></script>
@@ -60,24 +60,29 @@
                 /*界面初始化数据开始*/
                 try {
                     var resultone = protocal_get('servernet', null);
-                    /* var resultone = ['12', '233', 'off']*/
+                    /*var resultone = ['12', '233', 'off']*/
                     if(resultone.length < 3) {
                         //throw "servernet result count failure";
                     } else {
                         $('#n_ip').val(resultone[0]);
                         $('#n_port').val(resultone[1]);
                         if(resultone[2] == 'on') {
-                            $('#cstart').prop('checked', 'true');
+                            form.val('example', {
+                                'cstatus': true
+                            })
                         } else {
-                            $('#cstop').prop('checked', 'true');
+                            form.val('example', {
+                                'cstatus': false
+                            })
                         }
-                        form.render('radio');
+                        form.render();
                     }
                 } catch(err) {}
-                /*界面初始化数据结束*/
-                /*监听radio单选开始 */
-                form.on('radio(radio)', function (data) {
-                    if(data.value == '是') {
+                //监听指定开关
+                form.on('switch(switchTest)', function (data) {
+                    /* alert(this.checked)*/
+                    /* this.checked = 'false';*/
+                    if(this.checked == true) {
                         layer.open({
                             title: ' ',
                             icon: 3,
@@ -114,8 +119,8 @@
                                 }
                             },
                             btn2: function (index) {
-                                $('#cstop').prop('checked', 'true');
-                                form.render('radio');
+                                $('#cstatus').prop('checked', false);
+                                form.render('checkbox');
                                 layer.close(index);
                             }
                         });
@@ -156,19 +161,19 @@
                                 }
                             },
                             btn2: function (index) {
-                                $('#cstart').prop('checked', 'true');
-                                form.render('radio');
+                                $('#cstatus').prop('checked', true);
+                                form.render('checkbox');
                                 layer.close(index);
                             }
                         });　
                     }
-                })
-                /*监听radio单选结束*/
+                });
+                /*界面初始化数据结束*/
                 /* 监听提交开始*/
                 form.on('submit(demo1)', function (data) {
-                    var result = data.field.ip + '&' + data.field.port;
+                    var value = data.field.ip + '&' + data.field.port;
                     try {
-                        var resultAll = protocal_set('servernet', result);
+                        var resultAll = protocal_set('servernet', value);
                         if(resultAll.length == 2) {
                             if(resultAll[0] == 'ok' && resultAll[1] == 'ok') layer.msg('提交成功！', {
                                 time: 3000,

@@ -7,13 +7,7 @@
         <!-- Mobile Metas -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="css/main.css">
-        <link rel="stylesheet" type="text/css" href="./css/nativeMachineConfiguration.css">
-        <style type="text/css">
-            input.text-box {
-                width: 400px!important;
-            }
-        </style>
-    </head>
+        <link rel="stylesheet" type="text/css" href="./css/nativeMachineConfiguration.css"> </head>
     <body>
         <div class="x-nav">
             <span class="layui-breadcrumb" lay-separator=">">
@@ -27,35 +21,35 @@
                     <cite>本机配置</cite>
                 </a>
             </span>
-            <a class="layui-btn layui-btn-sm" style="float: right;" onclick="security()" href="javascript:void(0);" title="刷新">
+            <a class="layui-btn layui-btn-sm" style="float: right;" onclick="freThisPaper()" href="javascript:void(0);" title="刷新">
                 <i class="layui-icon layui-icon-refresh"></i>
             </a>
         </div>
         <form class="layui-form layui-form-pane" style="margin-top:20px;">
             <div class="layui-form-item">
                 <label class="layui-form-label">IP</label>
-                <div class="layui-input-inline">
-                    <input type="text" id="b_ip" name="ip" lay-verify="required|ip" autocomplete="on" placeholder="请输入IP地址" class="layui-input text-box"> </div>
+                <div class="layui-input-block">
+                    <input type="text" id="b_ip" name="ip" lay-verify="required|ip" autocomplete="on" placeholder="请输入IP地址" class="layui-input"> </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">子网掩码</label>
-                <div class="layui-input-inline">
-                    <input type="text" id="b_subnet" name="subNet" lay-verify="required|subNet" autocomplete="on" placeholder="请输入子网掩码" class="layui-input text-box"> </div>
+                <div class="layui-input-block">
+                    <input type="text" id="b_subnet" name="subNet" lay-verify="required|subNet" autocomplete="on" placeholder="请输入子网掩码" class="layui-input"> </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">网关</label>
-                <div class="layui-input-inline">
-                    <input type="text" id="gateWay" name="gateWay" lay-verify="required|gateWay" autocomplete="on" placeholder="请输入网关" class="layui-input text-box"> </div>
+                <div class="layui-input-block">
+                    <input type="text" id="gateWay" name="gateWay" lay-verify="required|gateWay" autocomplete="on" placeholder="请输入网关" class="layui-input"> </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">MAC地址</label>
-                <div class="layui-input-inline">
-                    <input type="text" id="b_MAC" name="mac" autocomplete="on" placeholder="请输入MAC地址" class="layui-input text-box" disabled="disabled"> </div>
+                <div class="layui-input-block">
+                    <input type="text" id="b_MAC" name="mac" autocomplete="on" placeholder="请输入MAC地址" class="layui-input" disabled="disabled"> </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">名称修改</label>
-                <div class="layui-input-inline">
-                    <input type="text" id="b_name" name="name" lay-verify="required|name" autocomplete="on" placeholder="名称修改" class="layui-input text-box"> </div>
+                <div class="layui-input-block">
+                    <input type="text" id="b_name" name="name" lay-verify="required|name" autocomplete="on" placeholder="名称修改" class="layui-input"> </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
@@ -145,6 +139,7 @@
                 <span style="display:none;color:red;" id="imgWait">上传图片中...</span>
             </div>
         </fieldset>
+        <script type="text/javascript" src="./js/forbid_backspace.js"></script>
         <script type="text/javascript" src="./js/protocal.js"></script>
         <script type="text/javascript" src="./js/security.js"></script>
         <script type="text/javascript" src="./js/jquery-3.2.1.js"></script>
@@ -154,71 +149,17 @@
         <script type="text/javascript">
             layui.use(['element', 'layer', 'form', 'laydate'], function () {
                 var form = layui.form,
-                    layer = layui.layer,
                     laydate = layui.laydate,
                     $ = layui.jquery;
-                /*radio监听事件开始*/
-                form.on('radio(radio)', function (data) {
-                    if(data.value == '是') {
-                        $('#timeOne').removeAttr('disabled');
-                    } else {
-                        $('#timeOne').attr('disabled', 'disabled');
-                    }
-                });
-                /*常开、常关、自动开始*/
-                form.on('radio(radio1)', function (data) {
-                    if(data.value == '常开') {
-                        $('#startOne').attr('disabled', '');
-                        $('#stopOne').attr('disabled', '');
-                        $('#startTwo').attr('disabled', '');
-                        $('#stopTwo').attr('disabled', '');
-                        $('#timeOne').attr('disabled', 'disabled');
-                    } else if(data.value == '常关') {
-                        $('#startOne').attr('disabled', '');
-                        $('#stopOne').attr('disabled', '');
-                        $('#startTwo').attr('disabled', '');
-                        $('#stopTwo').attr('disabled', '');
-                        $('#timeOne').attr('disabled', 'disabled');
-                    } else {
-                        $('#startOne').removeAttr('disabled');
-                        $('#stopOne').removeAttr('disabled');
-                        if($('#stopOne').prop('checked')) {
-                            $('#startTwo').attr('disabled', '');
-                            $('#stopTwo').attr('disabled', '');
-                            $('#timeOne').attr('disabled', 'disabled');
-                        } else {
-                            $('#startTwo').removeAttr('disabled');
-                            $('#stopTwo').removeAttr('disabled');
-                            $('#timeOne').removeAttr('disabled');
-                        }
-                    }
-                    form.render();
-                })
-                /*常开、常关、自动结束*/
-                form.on('radio(radio2)', function (data) {
-                    if(data.value == '是') {
-                        $('#timeOne').removeAttr('disabled');
-                        $('#startTwo').removeAttr('disabled');
-                        $('#stopTwo').removeAttr('disabled');
-                        if($('#startTwo').prop('checked') == false) {
-                            $('#timeOne').attr('disabled', 'disabled');
-                        } else {
-                            $('#timeOne').removeAttr('disabled');
-                        }
-                    } else {
-                        $('#startTwo').attr('disabled', '');
-                        $('#stopTwo').attr('disabled', '');
-                        $('#timeOne').attr('disabled', 'disabled');
-                    }
-                    form.render();
-                });
-                /*radio监听事件结束*/
+                layer = layui.layer;
                 /*界面初始值开始*/
                 try {
                     var resultone = protocal_get_one("pic_work", null);
                     var resulttwo = protocal_get("localnet", null);
                     /*var resultone = ['100', '1', '1%']
-                    var resulttwo = ['12', '12', '12', '12', '12', '2', 'off', '12', 'off', '12', '12', '12', '12', '12', '12', ]*/
+                    var resulttwo = ['172.16.10.125', '255.255.255.0', '172.16.10.12', '15', '56'];
+                    var resulttwo = ['172.16.10.125', '255.255.255.0', '172.16.10.12', '15', '56', '2', 'off', '12', 'off', '12', '12', '12', '12', '12', '12', ];
+*/
                     if(resultone.length < 3) {} else {
                         $('#totalStorageSpace').val(resultone[0] + 'KB');
                         $('#haveBeenUsed').val(resultone[1] + 'KB');
@@ -299,6 +240,62 @@
                     }
                 } catch(err) {}
                 /*界面初始值结束*/
+                /*radio监听事件开始*/
+                form.on('radio(radio)', function (data) {
+                    if(data.value == '是') {
+                        $('#timeOne').removeAttr('disabled');
+                    } else {
+                        $('#timeOne').attr('disabled', 'disabled');
+                    }
+                });
+                /*常开、常关、自动开始*/
+                form.on('radio(radio1)', function (data) {
+                    if(data.value == '常开') {
+                        $('#startOne').attr('disabled', '');
+                        $('#stopOne').attr('disabled', '');
+                        $('#startTwo').attr('disabled', '');
+                        $('#stopTwo').attr('disabled', '');
+                        $('#timeOne').attr('disabled', 'disabled');
+                    } else if(data.value == '常关') {
+                        $('#startOne').attr('disabled', '');
+                        $('#stopOne').attr('disabled', '');
+                        $('#startTwo').attr('disabled', '');
+                        $('#stopTwo').attr('disabled', '');
+                        $('#timeOne').attr('disabled', 'disabled');
+                    } else {
+                        $('#startOne').removeAttr('disabled');
+                        $('#stopOne').removeAttr('disabled');
+                        if($('#stopOne').prop('checked')) {
+                            $('#startTwo').attr('disabled', '');
+                            $('#stopTwo').attr('disabled', '');
+                            $('#timeOne').attr('disabled', 'disabled');
+                        } else {
+                            $('#startTwo').removeAttr('disabled');
+                            $('#stopTwo').removeAttr('disabled');
+                            $('#timeOne').removeAttr('disabled');
+                        }
+                    }
+                    form.render();
+                })
+                /*常开、常关、自动结束*/
+                form.on('radio(radio2)', function (data) {
+                    if(data.value == '是') {
+                        $('#timeOne').removeAttr('disabled');
+                        $('#startTwo').removeAttr('disabled');
+                        $('#stopTwo').removeAttr('disabled');
+                        if($('#startTwo').prop('checked') == false) {
+                            $('#timeOne').attr('disabled', 'disabled');
+                        } else {
+                            $('#timeOne').removeAttr('disabled');
+                        }
+                    } else {
+                        $('#startTwo').attr('disabled', '');
+                        $('#stopTwo').attr('disabled', '');
+                        $('#timeOne').attr('disabled', 'disabled');
+                    }
+                    form.render();
+                });
+                /*radio监听事件结束*/
                 /*第一个提交按钮 开始*/
                 form.verify({
                     ip: function (value) {
@@ -338,11 +335,12 @@
                         andResultSix = resultSubnet[1] & regGateWayAll[1],
                         andResultSeven = resultSubnet[2] & regGateWayAll[2],
                         andResultEight = resultSubnet[3] & regGateWayAll[3];
-                    var resultFiveArray = stringToBytes(data.field.name);
+                    var result_5 = nameFormat(data.field.name);
+                    var resultFiveArray = stringToBytes(result_5);
                     if(resultFiveArray.length <= '32') {
                         if(andResultOne == andResultFive && andResultTwo == andResultSix && andResultThree == andResultSeven && andResultFour == andResultEight) {
                             var base = new Base64();
-                            var result_51 = base.encode(data.field.name);
+                            var result_51 = base.encode(result_5);
                             var result = data.field.ip + '&' + data.field.subNet + '&' + data.field.gateWay + '&' + data.field.mac + '&' + result_51;
                             try {
                                 //var resultarray = ['ok','ok','ok'];
@@ -649,6 +647,22 @@
                         if(imgformat != ".bmp") {
                             layer.msg('只能上传bmp格式的图片！', { icon: 5 });
                         } else {
+                            var result = protocal_get_one('test', null);
+                            /*var result = ['12', 'timg (14).bmp'];*/
+                            for(var i = 1; i <= result.length - 1; i++) {
+                                if(result[i] != localImages.files[0].name) {
+                                    break;
+                                } else {
+                                    layer.msg('已经存在以此命名的图片,请修改图片名称！', {
+                                        time: 3000,
+                                        icon: 7,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    });
+                                    return false;
+                                }
+                            }
                             var f = localImages.files[0];
                             var reader = new FileReader();
                             reader.onload = function (e) {
@@ -727,6 +741,25 @@
                     }
                 })
             })
+
+            function nameFormat(value) {
+                if(!/^[\u4e00-\u9fa5\-a-z0-9()（）]+$/ig.test(value)) {
+                    var valueArr = value.split("");
+                    var newValue = "";
+                    for(var i = 0; i < valueArr.length; i++) {
+                        if(!/^[\u4e00-\u9fa5\-a-z0-9()（）]+$/ig.test(valueArr[i])) {
+                            valueArr[i] = "_";
+                            newValue += valueArr[i];
+                        } else {
+                            newValue += valueArr[i];
+                        }
+                    }
+                    return newValue;
+                } else {
+                    var newValue = value;
+                    return newValue;
+                }
+            }
             /*图片上传结束*/
             /*检测ip格式*/
             function check_ip(id, id1) {

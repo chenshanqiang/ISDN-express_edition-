@@ -6,12 +6,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10,chrome=1">
         <!-- Mobile Metas -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="./css/main.css"> 
-        <link rel="stylesheet" type="text/css" href="./font-awesome/css/font-awesome.css"> 
-    </head>
+        <link rel="stylesheet" type="text/css" href="./css/main.css">
+        <link rel="stylesheet" type="text/css" href="./font-awesome/css/font-awesome.css"> </head>
     <body onload="onloadmain()">
         <div class="layui-layout layui-layout-admin">
-            <div class="layui-header header header-demo">
+            <div class="layui-header header header-demo" style="min-width: 900px;">
                 <div class="layui-main">
                     <a style="display:inline-block;" class="logo" href="javascript:;">
                         <img src="images/mainlog.png" style="height: 40px;"> </a>
@@ -31,7 +30,7 @@
                     <ul class="layui-nav layui-nav-tree site-demo-nav" lay-filter="side">
                         <li class="layui-nav-item layui-nav-itemed">
                             <a class="javascript:;" href="javascript:;" id="one" onclick="href_web('terminationState')">
-                            	<i class="fa fa-terminal fa-lg fa-fw" aria-hidden="true"></i>
+                                <i class="fa fa-square fa-lg fa-fw" aria-hidden="true"></i>
                                 <cite>终端状态</cite>
                             </a>
                         </li>
@@ -57,7 +56,7 @@
                 </div>
             </div>
             <div class="layui-tab layui-tab-card site-demo-title x-main" lay-filter="x-tab" lay-allowclose="true">
-                <div class="x-slide_left"></div>
+                <!--<div class="x-slide_left"></div>-->
                 <div class="layui-tab-content site-demo site-demo-body">
                     <div class="layui-tab-item layui-show">
                         <iframe frameborder="0" name="main" src="terminationState.html" class="x-iframe" id="main-iframe"></iframe>
@@ -67,6 +66,7 @@
             <div class="layui-footer footer" style=" height:40px;line-height: 40px; border-top: 4px solid #9F9F9F;">
                 <!-- 底部固定区域 -->版权所有©广州市迪士普智慧科技有限公司 </div>
         </div>
+        <script type="text/javascript" src="./js/forbid_backspace.js"></script>
         <script type="text/javascript" src="./js/security.js"></script>
         <script type="text/javascript" src="./js/protocal.js"></script>
         <script type="text/javascript" src="./js/base64.js"></script>
@@ -75,41 +75,18 @@
             layui.use(['element', 'layer'], function () {
                 var layer = layui.layer,
                     $ = layui.jquery;
-                //导航的hover效果、二级菜单等功能，需要依赖element模块
-                // 侧边栏点击隐藏兄弟元素
                 $('.layui-nav-item').click(function (event) {
                     $(this).siblings().removeClass('layui-nav-itemed');
                 });
                 $('.layui-tab-title li').eq(0).find('i').remove();
                 height = $('.layui-layout-admin .site-demo').height();
                 $('.layui-layout-admin .site-demo').height(height - 100);
-                if($(window).width() < 750) {
-                    trun = 0;
-                    $('.x-slide_left').css('background-position', '0px -61px');
-                } else {
-                    trun = 1;
-                }
-                $('.x-slide_left').click(function (event) {
-                    if(trun) {
-                        $('.x-side').animate({
-                            left: '-200px'
-                        }, 200).siblings('.x-main').animate({
-                            left: '0px'
-                        }, 200);
-                        $(this).css('background-position', '0px -61px');
-                        $('.layui-footer').css("margin-left", "-200px");
-                        trun = 0;
-                    } else {
-                        $('.x-side').animate({
-                            left: '0px'
-                        }, 200).siblings('.x-main').animate({
-                            left: '200px'
-                        }, 200);
-                        $(this).css('background-position', '0px 0px');
-                        $('.layui-footer').css("margin-left", "0px");
-                        trun = 1;
-                    }
-                });
+                $(window).resize(function () {
+                    var winheight = $(window).height();
+                    var header = $('.header').height();
+                    var footer = $('.footer').height();
+                    $('.site-demo-body').height(winheight - header - footer - 5);
+                })
             });
         </script>
         <script type="text/javascript">
@@ -144,9 +121,11 @@
             function changeColor1() {
                 document.getElementById('exit').style.color = '#008D8F';
             }
-            function jumpmain(){
-            	location.href = './index.html';
+
+            function jumpmain() {
+                location.href = './index.html';
             }
+
             function changeColor2() {
                 document.getElementById('exit').style.color = 'black';
             }
