@@ -61,39 +61,39 @@
             <div class="layui-form-item" pane=" ">
                 <label class="layui-form-label label-one lable-auto">220V输出电源开关机模式 </label>
                 <div class="layui-input-block layui-input-block-first">
-                    <input type="radio" id='normalOpen' name="power" value="常开" title="常开" lay-filter='radio1' />
-                    <input type="radio" id='normalClose' name="power" value="常关" title="常关" lay-filter='radio1' />
-                    <input type="radio" id='auto' name="power" value="自动" title="自动" lay-filter='radio1' /> </div>
+                    <input type="radio" id='normalOpen' name="power" value="0" title="常开" lay-filter='radio1' />
+                    <input type="radio" id='normalClose' name="power" value="1" title="常关" lay-filter='radio1' />
+                    <input type="radio" id='auto' name="power" value="2" title="自动" lay-filter='radio1' /> </div>
             </div>
             <div class="layui-form-item" pane=" ">
                 <label class="layui-form-label label-one lable-auto">播放视频源是否打开电源 </label>
                 <div class="layui-input-block layui-input-block-first">
-                    <input type="radio" id='startOne' name="statusTwo" value="是" title="是" lay-filter='radio2' />
-                    <input type="radio" id='stopOne' name="statusTwo" value="否" title="否" lay-filter='radio2' /> </div>
+                    <input type="radio" id='startOne' name="statusTwo" value="on" title="是" lay-filter='radio2' />
+                    <input type="radio" id='stopOne' name="statusTwo" value="off" title="否" lay-filter='radio2' /> </div>
             </div>
             <div class="layui-form-item" pane=" ">
                 <label class="layui-form-label label-one lable-auto">播放视频源结束后是否自动待机 </label>
                 <div class="layui-input-block layui-input-block-first">
-                    <input type="radio" id='startTwo' name="statusFour" value="是" title="是" lay-filter='radio' />
-                    <input type="radio" id='stopTwo' name="statusFour" value="否" title="否" lay-filter='radio' /> </div>
+                    <input type="radio" id='startTwo' name="statusFour" value="on" title="是" lay-filter='radio' />
+                    <input type="radio" id='stopTwo' name="statusFour" value="off" title="否" lay-filter='radio' /> </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label label-one lable-auto">播放视频源结束后延时关闭电源 </label>
                 <div class="layui-input-inline">
-                    <input type="text" onkeyup="checkTimeOne('timeOne')" name="title" id='timeOne' class="layui-input text-align"> </div>
+                    <input type="text" onkeyup="checkTimeOne('timeOne')" lay-verify="required|timeOne" name="timeOne" id='timeOne' class="layui-input text-align"> </div>
                 <div class="layui-form-mid">分钟</div>
                 <div class="layui-form-mid layui-word-aux">注：输入范围为1-30</div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">关机时间 </label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="title" id="timeThree" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
-                </div>
-                <div class="layui-inline">
                     <label class="layui-form-label">开机时间 </label>
                     <div class="layui-input-inline">
-                        <input type="text" name="title" id="timeTwo" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
+                        <input type="text" name="timeTwo" id="timeTwo" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">关机时间 </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="timeThree" id="timeThree" placeholder="格式为HH:mm:ss" class="layui-input text-align"> </div>
                 </div>
                 <div class="layui-inline">
                     <div class="layui-form-mid layui-word-aux">注：只可设置当天的时间，不支持跨日设置</div>
@@ -148,16 +148,16 @@
         <script type="text/javascript" src="./js/base64.js"></script>
         <script type="text/javascript">
             layui.use(['element', 'layer', 'form', 'laydate'], function () {
-                var form = layui.form,
+                var layer = layui.layer,
+                    form = layui.form,
                     laydate = layui.laydate,
                     $ = layui.jquery;
-                layer = layui.layer;
+                $("#totalStorageSpace,#haveBeenUsed,#usageRates").attr('disabled', 'disabled');
                 /*界面初始值开始*/
                 try {
                     var resultone = protocal_get_one("pic_work", null);
                     var resulttwo = protocal_get("localnet", null);
                     /*var resultone = ['100', '1', '1%']
-                    var resulttwo = ['172.16.10.125', '255.255.255.0', '172.16.10.12', '15', '56'];
                     var resulttwo = ['172.16.10.125', '255.255.255.0', '172.16.10.12', '15', '56', '2', 'off', '12', 'off', '12', '12', '12', '12', '12', '12', ];
 */
                     if(resultone.length < 3) {} else {
@@ -242,7 +242,7 @@
                 /*界面初始值结束*/
                 /*radio监听事件开始*/
                 form.on('radio(radio)', function (data) {
-                    if(data.value == '是') {
+                    if(data.value == 'on') {
                         $('#timeOne').removeAttr('disabled');
                     } else {
                         $('#timeOne').attr('disabled', 'disabled');
@@ -250,13 +250,13 @@
                 });
                 /*常开、常关、自动开始*/
                 form.on('radio(radio1)', function (data) {
-                    if(data.value == '常开') {
+                    if(data.value == 0) {
                         $('#startOne').attr('disabled', '');
                         $('#stopOne').attr('disabled', '');
                         $('#startTwo').attr('disabled', '');
                         $('#stopTwo').attr('disabled', '');
                         $('#timeOne').attr('disabled', 'disabled');
-                    } else if(data.value == '常关') {
+                    } else if(data.value == 1) {
                         $('#startOne').attr('disabled', '');
                         $('#stopOne').attr('disabled', '');
                         $('#startTwo').attr('disabled', '');
@@ -279,7 +279,7 @@
                 })
                 /*常开、常关、自动结束*/
                 form.on('radio(radio2)', function (data) {
-                    if(data.value == '是') {
+                    if(data.value == 'on') {
                         $('#timeOne').removeAttr('disabled');
                         $('#startTwo').removeAttr('disabled');
                         $('#stopTwo').removeAttr('disabled');
@@ -320,6 +320,12 @@
                         var regGateway = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
                         if(!regGateway.test(value)) {
                             return '网关输入错误！';
+                        }
+                    },
+                    timeOne: function (value) {
+                        var regTwotime = /(^[1-2][0-9]$)|(^30$)|(^[1-9]$)/;
+                        if(!regTwotime.test(value)) {
+                            return '输入有误！';
                         }
                     }
                 });
@@ -401,129 +407,91 @@
                 /*第一个提交按钮 结束*/
                 /*第二个提交按钮 开始*/
                 form.on('submit(demo2)', function (data) {
-                    var on_off_second, on_off_third, parse_one,
-                        parse_one_open = $('#normalOpen').prop('checked'),
-                        parse_one_close = $('#normalClose').prop('checked'),
-                        parse_one_auto = $('#auto').prop('checked'),
-                        parse_two = $('#startOne').prop('checked'),
-                        parse_three = $('#startTwo').prop('checked'),
-                        parse_four = $('#timeOne').val(),
-                        parse_five = $('#timeTwo').val(),
-                        parse_six = $('#timeThree').val();
-                    if(parse_two == true) {
-                        on_off_second = 'on';
-                    } else {
-                        on_off_second = 'off';
-                    }
-                    if(parse_three == true) {
-                        on_off_third = 'on';
-                    } else {
-                        on_off_third = 'off';
-                    }
-                    if(parse_one_open == true) {
-                        parse_one = '0';
-                    } else if(parse_one_close == true) {
-                        parse_one = '1';
-                    } else {
-                        parse_one = '2';
-                    }
                     try {
-                        if(parse_four == '' || parse_five == '' || parse_six == '') {
-                            layer.msg('数据不能空！', {
+                        var parseFivearray, parseSixarray, fivearrayminussixarrayone, fivearrayminussixarraytwo, fivearrayminussixarraythree;
+                        parseFivearray = data.field.timeTwo.split(':'),
+                            parseSixarray = data.field.timeThree.split(':'),
+                            fivearrayminussixarrayone = parseFivearray[0] - parseSixarray[0],
+                            fivearrayminussixarraytwo = parseFivearray[1] - parseSixarray[1],
+                            fivearrayminussixarraythree = parseFivearray[2] - parseSixarray[2];
+                        var result = data.field.power + '&' + data.field.statusTwo + '&' + data.field.statusFour + '&' + data.field.timeOne + '&' + parseSixarray[0] + '&' + parseSixarray[1] + '&' + parseSixarray[2] + '&' + parseFivearray[0] + '&' + parseFivearray[1] + '&' + parseFivearray[2];
+                        if(fivearrayminussixarrayone > 0) {
+                            var resultAll = protocal_set('localnet_work', result);
+                            if(resultAll.length < 1) {
+                                throw " result count failure";
+                            } else {
+                                if(resultAll[0] == 'ok') {
+                                    layer.msg('提交成功！', {
+                                        time: 3000,
+                                        icon: 1,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    })
+                                } else {
+                                    layer.msg('提交失败！', {
+                                        time: 3000,
+                                        icon: 2,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    })
+                                }
+                            }
+                        } else if(fivearrayminussixarrayone == 0 && fivearrayminussixarraytwo > 1) {
+                            var resultAll = protocal_set('localnet_work', result);
+                            if(resultAll.length < 1) {
+                                throw " result count failure";
+                            } else {
+                                if(resultAll[0] == 'ok') {
+                                    layer.msg('提交成功！', {
+                                        time: 3000,
+                                        icon: 1,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    })
+                                } else {
+                                    layer.msg('提交失败！', {
+                                        time: 3000,
+                                        icon: 2,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    })
+                                }
+                            }
+                        } else if(fivearrayminussixarrayone == 0 && fivearrayminussixarraytwo == 1 && fivearrayminussixarraythree >= 0) {
+                            var resultAll = protocal_set('localnet_work', result);
+                            if(resultAll.length < 1) {
+                                throw " result count failure";
+                            } else {
+                                if(resultAll[0] == 'ok') {
+                                    layer.msg('提交成功！', {
+                                        time: 3000,
+                                        icon: 1,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    })
+                                } else {
+                                    layer.msg('提交失败！', {
+                                        time: 3000,
+                                        icon: 2,
+                                        anim: 0,
+                                        skin: 'message',
+                                        shade: [0.5, '#393D49']
+                                    })
+                                }
+                            }
+                        } else {
+                            layer.msg('时间范围输入错误！', {
                                 time: 3000,
                                 icon: 2,
                                 anim: 0,
                                 skin: 'message',
                                 shade: [0.5, '#393D49']
                             })
-                        } else {
-                            var parseFivearray, parseSixarray, fivearrayminussixarrayone, fivearrayminussixarraytwo, fivearrayminussixarraythree;
-                            parseFivearray = parse_five.split(':'),
-                                parseSixarray = parse_six.split(':'),
-                                fivearrayminussixarrayone = parseFivearray[0] - parseSixarray[0],
-                                fivearrayminussixarraytwo = parseFivearray[1] - parseSixarray[1],
-                                fivearrayminussixarraythree = parseFivearray[2] - parseSixarray[2];
-                            var result = parse_one + '&' + on_off_second + '&' + parse_four + '&' + on_off_third + '&' + parseSixarray[0] + '&' + parseSixarray[1] + '&' + parseSixarray[2] + '&' + parseFivearray[0] + '&' + parseFivearray[1] + '&' + parseFivearray[2];
-                            /*检验开机时间大于关机时间一分钟*/
-                            if(fivearrayminussixarrayone > 0) {
-                                var resultAll = protocal_set('localnet_work', result);
-                                if(resultAll.length < 1) {
-                                    throw " result count failure";
-                                } else {
-                                    if(resultAll[0] == 'ok') {
-                                        layer.msg('提交成功！', {
-                                            time: 3000,
-                                            icon: 1,
-                                            anim: 0,
-                                            skin: 'message',
-                                            shade: [0.5, '#393D49']
-                                        })
-                                    } else {
-                                        layer.msg('提交失败！', {
-                                            time: 3000,
-                                            icon: 2,
-                                            anim: 0,
-                                            skin: 'message',
-                                            shade: [0.5, '#393D49']
-                                        })
-                                    }
-                                }
-                            } else if(fivearrayminussixarrayone == 0 && fivearrayminussixarraytwo > 1) {
-                                var resultAll = protocal_set('localnet_work', result);
-                                if(resultAll.length < 1) {
-                                    throw " result count failure";
-                                } else {
-                                    if(resultAll[0] == 'ok') {
-                                        layer.msg('提交成功！', {
-                                            time: 3000,
-                                            icon: 1,
-                                            anim: 0,
-                                            skin: 'message',
-                                            shade: [0.5, '#393D49']
-                                        })
-                                    } else {
-                                        layer.msg('提交失败！', {
-                                            time: 3000,
-                                            icon: 2,
-                                            anim: 0,
-                                            skin: 'message',
-                                            shade: [0.5, '#393D49']
-                                        })
-                                    }
-                                }
-                            } else if(fivearrayminussixarrayone == 0 && fivearrayminussixarraytwo == 1 && fivearrayminussixarraythree >= 0) {
-                                var resultAll = protocal_set('localnet_work', result);
-                                if(resultAll.length < 1) {
-                                    throw " result count failure";
-                                } else {
-                                    if(resultAll[0] == 'ok') {
-                                        layer.msg('提交成功！', {
-                                            time: 3000,
-                                            icon: 1,
-                                            anim: 0,
-                                            skin: 'message',
-                                            shade: [0.5, '#393D49']
-                                        })
-                                    } else {
-                                        layer.msg('提交失败！', {
-                                            time: 3000,
-                                            icon: 2,
-                                            anim: 0,
-                                            skin: 'message',
-                                            shade: [0.5, '#393D49']
-                                        })
-                                    }
-                                }
-                            } else {
-                                layer.msg('时间范围输入错误！', {
-                                    time: 3000,
-                                    icon: 2,
-                                    anim: 0,
-                                    skin: 'message',
-                                    shade: [0.5, '#393D49']
-                                })
-                            }
-                            /*检验开机时间大于关机时间一分钟*/
                         }
                     } catch(err) {
                         alert(err);
@@ -531,7 +499,6 @@
                     return false;
                 })
                 /*第二个提交按钮 结束*/
-                $("#totalStorageSpace,#haveBeenUsed,#usageRates").attr('disabled', 'disabled');
                 /*查看图片开始*/
                 $("#view_image").off('click').on('click', function () {
                     if($('#imgs').attr('name') == 'test') {
@@ -636,9 +603,7 @@
                     } catch(err) {}
                 })
                 /*图片选定结束*/
-            })
-            /*图片上传开始*/
-            $(function () {
+                /*图片上传开始*/
                 $("#upload").on("click", function () {
                     var localImages = document.getElementById("file1");
                     if(localImages.files[0]) {
@@ -761,70 +726,6 @@
                 }
             }
             /*图片上传结束*/
-            /*检测ip格式*/
-            function check_ip(id, id1) {
-                var str = document.getElementById(id).value;
-                if(str != '') {
-                    var reg = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
-                    if(!reg.test(str)) {
-                        document.getElementById(id1).style.display = "";
-                        document.getElementById(id1).innerHTML = "IP输入格式错误,请重新输入！";
-                    } else {
-                        document.getElementById(id1).style.display = "none";
-                    }
-                } else {
-                    document.getElementById(id1).innerHTML = "";
-                }
-            }
-            /*检测子网掩码格式*/
-            function checkSubnet(id, id1) {
-                var str = document.getElementById(id).value;
-                if(str != '') {
-                    var reg = /^(254|252|248|240|224|192|128)\.0\.0\.0|255\.(254|252|248|240|224|192|128|0)\.0\.0|255\.255\.(254|252|248|240|224|192|128|0)\.0|255\.255\.255\.(254|252|248|240|224|192|128|0)$/;
-                    if(!reg.test(str)) {
-                        document.getElementById(id1).style.display = "";
-                        document.getElementById(id1).innerHTML = "子网掩码输入格式错误，请重新输入！";
-                    } else {
-                        document.getElementById(id1).style.display = "none";
-                    }
-                } else {
-                    document.getElementById(id1).innerHTML = "";
-                }
-            }
-            /*检测网关格式*/
-            function gateWay(id, id1) {
-                var str = document.getElementById(id).value;
-                if(str != '') {
-                    var reg = /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/;
-                    if(!reg.test(str)) {
-                        document.getElementById(id1).style.display = "";
-                        document.getElementById(id1).innerHTML = "网关输入格式错误，请重新输入！";
-                    } else {
-                        document.getElementById(id1).style.display = "none";
-                    }
-                } else {
-                    document.getElementById(id1).innerHTML = "";
-                }
-            }
-            /*检测Mac格式*/
-            function check_mac(id, id1) {
-                var str = document.getElementById(id).value;
-                var reg = /[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}/;
-                if(!reg.test(str)) {
-                    document.getElementById(id1).style.display = "";
-                    document.getElementById(id1).innerHTML = "MAC输入格式错误，请重新输入！"
-                } else {
-                    document.getElementById(id1).style.display = "none";
-                }
-            }
-            /* 验证延时关闭电源时间输入值*/
-            function checkTimeOne(param) {
-                var regTwotime = /(^[1-2][0-9]$)|(^30$)|(^[1-9]$)/;
-                var timeTwo = document.getElementById(param).value;
-                if(regTwotime.test(timeTwo) || timeTwo == '') {} else {
-                    document.getElementById(param).value = '';
-                }
-            }
             /*@description:将string转为UTF-8格式signed char字节数组 */
             function stringToBytes(str) {
                 var bytes = new Array();

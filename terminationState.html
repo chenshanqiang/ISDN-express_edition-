@@ -5,8 +5,7 @@
         <title>音视频一线通终端管理设置</title>
         <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="./css/main.css">
-    </head>
+        <link rel="stylesheet" type="text/css" href="./css/main.css"> </head>
     <body>
         <div class="x-nav">
             <span class="layui-breadcrumb" lay-separator=">">
@@ -74,17 +73,15 @@
         <script type="text/javascript" src="./layui/layui.js"></script>
         <script type="text/javascript" src="./js/base64.js"></script>
         <script type="text/javascript">
-        	layui.use(['element', 'layer'], function () {
-                var layer = layui.layer;
-            });
-            var mainfunc = function () {
+            layui.use(['element', 'layer'], function () {
+                layer = layui.layer;
                 try {
                     var result = protocal_get("work_status", null);
                     var resultLeft = protocal_get("left_amp", null);
                     var resultRight = protocal_get("right_amp", null);
-                    /* var resultLeft = ['1'];
-                     var resultRight = ['1'];
-                     var result = ['100', '6ZmI5ZaE5by6', '56', '12'];*/
+                    /*var resultLeft = ['0'];
+                    var resultRight = ['1'];
+                    var result = ['0', '6ZmI5ZaE5by6', '100', '12'];*/
                     var base = new Base64();
                     if(result.length < 4) {
                         throw 'return parse amount error'
@@ -117,11 +114,11 @@
                             case '1000':
                                 document.getElementById('termination').innerHTML = '音频采集';
                                 document.getElementById('currentSource').innerHTML = ' ';
-                                break;  
+                                break;
                             case '2000':
                                 document.getElementById('termination').innerHTML = '视频采集';
                                 document.getElementById('currentSource').innerHTML = ' ';
-                                break;    
+                                break;
                         }
                     }
                     /*获取左功放状态*/
@@ -181,9 +178,113 @@
                 } catch(e) {
                     //TODO handle the exception
                 }
-            }
-            mainfunc();
-            setInterval(mainfunc, 2500);
+                setInterval(function () {
+                    try {
+                        var result = protocal_get("work_status", null);
+                        var resultLeft = protocal_get("left_amp", null);
+                        var resultRight = protocal_get("right_amp", null);
+                        /*var resultLeft = ['1'];
+                        var resultRight = ['1'];
+                        var result = ['100', '6ZmI5ZaE5by6', '56', '12'];*/
+                        var base = new Base64();
+                        if(result.length < 4) {
+                            throw 'return parse amount error'
+                        } else {
+                            var name = base.decode(result[1]);
+                            document.getElementById('range1').value = result[2];
+                            document.getElementById('value').innerHTML = result[2];
+                            document.getElementById('temperature').innerHTML = result[3] + '℃';
+                            switch(result[0]) {
+                                case '0':
+                                    document.getElementById('termination').innerHTML = '空闲';
+                                    document.getElementById('currentSource').innerHTML = ' ';
+                                    break;
+                                case '2':
+                                    document.getElementById('termination').innerHTML = '直播从教室';
+                                    document.getElementById('currentSource').innerHTML = ' ';
+                                    break;
+                                case '10':
+                                    document.getElementById('termination').innerHTML = '文件点播';
+                                    document.getElementById('currentSource').innerHTML = name;
+                                    break;
+                                case '80':
+                                    document.getElementById('termination').innerHTML = '音频寻呼从教室';
+                                    document.getElementById('currentSource').innerHTML = ' ';
+                                    break;
+                                case '800':
+                                    document.getElementById('termination').innerHTML = '消防广播';
+                                    document.getElementById('currentSource').innerHTML = ' ';
+                                    break;
+                                case '1000':
+                                    document.getElementById('termination').innerHTML = '音频采集';
+                                    document.getElementById('currentSource').innerHTML = ' ';
+                                    break;
+                                case '2000':
+                                    document.getElementById('termination').innerHTML = '视频采集';
+                                    document.getElementById('currentSource').innerHTML = ' ';
+                                    break;
+                            }
+                        }
+                        /*获取左功放状态*/
+                        if(resultLeft.length < 1) {
+                            throw 'return parse amount error'
+                        } else {
+                            switch(resultLeft[0]) {
+                                case '0':
+                                    $('#leftGongfangstatus').html('左功放状态');
+                                    $('#leftGongfangstatusone').html('保护');
+                                    $('#leftBtn').attr('class', 'layui-btn');
+                                    $('#leftBtn').off('click').on('click', function () {
+                                        leftbtnfunc();
+                                    })
+                                    break;
+                                case '1':
+                                    $('#leftBtn').attr('class', 'layui-btn layui-btn-disabled');
+                                    $('#leftGongfangstatus').html('左功放状态');
+                                    $('#leftGongfangstatusone').html('待机');
+                                    $('#leftBtn').off('click');
+                                    break;
+                                case '2':
+                                    $('#leftBtn').attr('class', 'layui-btn layui-btn-disabled');
+                                    $('#leftGongfangstatus').html('左功放状态');
+                                    $('#leftGongfangstatusone').html('工作');
+                                    $('#leftBtn').off('click');
+                                    break;
+                            }
+                        }
+                        /*获取右功放状态*/
+                        if(resultRight.length < 1) {
+                            throw 'return parse amount error'
+                        } else {
+                            switch(resultRight[0]) {
+                                case '0':
+                                    $("#rightGongfangstatus").html('右功放状态');
+                                    $("#rightGongfangstatusone").html('保护');
+                                    $('#rightBtn').attr('class', 'layui-btn');
+                                    $('#rightBtn').off('click').on('click', function () {
+                                        rightbtnfunc();
+                                    })
+                                    break;
+                                case '1':
+                                    $('#rightBtn').attr('class', 'layui-btn layui-btn-disabled');
+                                    $('#rightGongfangstatus').html('右功放状态');
+                                    $("#rightGongfangstatusone").html('待机');
+                                    $('#rightBtn').off('click');
+                                    break;
+                                case '2':
+                                    $('#rightBtn').attr('class', 'layui-btn layui-btn-disabled');
+                                    $("#rightGongfangstatus").html('右功放状态');
+                                    $("#rightGongfangstatusone").html('工作');
+                                    $('#rightBtn').off('click');
+                                    break;
+                            }
+                        }
+                    } catch(e) {
+                        //TODO handle the exception
+                    }
+                }, 2500);
+            });
+
             function leftbtnfunc() {
                 try {
                     var result = protocal_set('left_amp', 'left_rev');

@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="./css/main.css">
         <link rel="stylesheet" type="text/css" href="./font-awesome/css/font-awesome.css"> </head>
-    <body onload="onloadmain()">
+    <body>
         <div class="layui-layout layui-layout-admin">
             <div class="layui-header header header-demo" style="min-width: 900px;">
                 <div class="layui-main">
@@ -75,23 +75,6 @@
             layui.use(['element', 'layer'], function () {
                 var layer = layui.layer,
                     $ = layui.jquery;
-                $('.layui-nav-item').click(function (event) {
-                    $(this).siblings().removeClass('layui-nav-itemed');
-                });
-                $('.layui-tab-title li').eq(0).find('i').remove();
-                height = $('.layui-layout-admin .site-demo').height();
-                $('.layui-layout-admin .site-demo').height(height - 100);
-                $(window).resize(function () {
-                    var winheight = $(window).height();
-                    var header = $('.header').height();
-                    var footer = $('.footer').height();
-                    $('.site-demo-body').height(winheight - header - footer - 5);
-                })
-            });
-        </script>
-        <script type="text/javascript">
-            //When the page is loaded, the function is executed      
-            function onloadmain() {
                 try {
                     var userOne = getCookienameone("usernameone");
                     document.getElementById('user').innerHTML = userOne;
@@ -109,10 +92,24 @@
                         document.getElementById('classNameMain').innerHTML = resultClassName;
                     }
                 } catch(err) {
-                    //alert(err);
+                    alert(err)
                 }
-            }
-
+                $('.layui-nav-item').click(function (event) {
+                    $(this).siblings().removeClass('layui-nav-itemed');
+                });
+                $('.layui-tab-title li').eq(0).find('i').remove();
+                height = $('.layui-layout-admin .site-demo').height();
+                $('.layui-layout-admin .site-demo').height(height - 100);
+                $(window).resize(function () {
+                    var winheight = $(window).height();
+                    var header = $('.header').height();
+                    var footer = $('.footer').height();
+                    $('.site-demo-body').height(winheight - header - footer - 5);
+                })
+            });
+        </script>
+        <script type="text/javascript">
+            //When the page is loaded, the function is executed      
             function exit() {
                 location.href = './index.html';
                 setCookie("usernameone", "", "passone", "");
