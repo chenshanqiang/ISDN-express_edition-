@@ -52,6 +52,12 @@
                                 <cite>系统升级</cite>
                             </a>
                         </li>
+                        <li id="app" v-if="status === 'Y'" class="layui-nav-item">
+                            <a class="javascript:;" href="javascript:;" id="five" onclick="href_web('log_export')">
+                                <i class="fa fa-file fa-lg fa-fw" aria-hidden="true"></i>
+                                <cite>日志导出</cite>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -71,12 +77,26 @@
         <script type="text/javascript" src="./js/protocal.js"></script>
         <script type="text/javascript" src="./js/base64.js"></script>
         <script type="text/javascript" src="./layui/layui.js"></script>
+        <script type="text/javascript" src="./js/vue.min.js"></script>
+        <script type="text/javascript">
+        	var userOne = getCookienameone("usernameone");
+            if(userOne == 'dsppa') {
+                var statusyn = 'Y';
+            } else {
+                var statusyn = 'N';
+            }
+            new Vue({
+                el: '#app',
+                data: {
+                    status: statusyn
+                }
+            })
+        </script>
         <script type="text/javascript">
             layui.use(['element', 'layer'], function () {
                 var layer = layui.layer,
                     $ = layui.jquery;
                 try {
-                    var userOne = getCookienameone("usernameone");
                     document.getElementById('user').innerHTML = userOne;
                     var base = new Base64();
                     var result = protocal_get('main', null);
@@ -141,6 +161,9 @@
                     case 'remoteUpgrade':
                         document.getElementById('main-iframe').src = 'remoteUpgrade.html';
                         break;
+                    case 'log_export':
+                   		document.getElementById('main-iframe').src = 'log_export.html';
+                        break;    
                 }
             }
         </script>
