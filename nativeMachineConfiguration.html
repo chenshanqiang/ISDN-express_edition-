@@ -82,7 +82,7 @@
                 <div class="layui-input-inline">
                     <input type="text" onkeyup="checkTimeOne('timeOne')" lay-verify="required|timeOne" name="timeOne" id='timeOne' class="layui-input text-align"> </div>
                 <div class="layui-form-mid">分钟</div>
-                <div class="layui-form-mid layui-word-aux">注：输入范围为1-30</div>
+                <div class="layui-form-mid layui-word-aux">注：输入范围为0-30</div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
@@ -158,7 +158,7 @@
                     var resultone = protocal_get_one("pic_work", null);
                     var resulttwo = protocal_get("localnet", null);
                     /*var resultone = ['100', '1', '1%']
-                    var resulttwo = ['172.16.10.125', '255.255.255.0', '172.16.10.12', '15', '56', '2', 'off', '12', 'off', '12', '12', '12', '12', '12', '12', ];
+                    var resulttwo = ['172.16.10.125', '255.255.255.0', '172.16.10.12', '15', '56', '2', 'off', '0', 'off', '12', '14', '12', '12', '13', '12'];
 */
                     if(resultone.length < 3) {} else {
                         $('#totalStorageSpace').val(resultone[0] + 'KB');
@@ -247,6 +247,7 @@
                     } else {
                         $('#timeOne').attr('disabled', 'disabled');
                     }
+                    form.render();
                 });
                 /*常开、常关、自动开始*/
                 form.on('radio(radio1)', function (data) {
@@ -265,14 +266,18 @@
                     } else {
                         $('#startOne').removeAttr('disabled');
                         $('#stopOne').removeAttr('disabled');
-                        if($('#stopOne').prop('checked')) {
-                            $('#startTwo').attr('disabled', '');
-                            $('#stopTwo').attr('disabled', '');
-                            $('#timeOne').attr('disabled', 'disabled');
-                        } else {
+                        if($('#startOne').prop('checked') && $('#startTwo').prop('checked')) {
                             $('#startTwo').removeAttr('disabled');
                             $('#stopTwo').removeAttr('disabled');
                             $('#timeOne').removeAttr('disabled');
+                        } else if($('#startOne').prop('checked') && $('#stopTwo').prop('checked')) {
+                            $('#startTwo').removeAttr('disabled');
+                            $('#stopTwo').removeAttr('disabled');
+                            $('#timeOne').attr('disabled', 'disabled');
+                        } else if($('#stopOne').prop('checked')) {
+                            $('#startTwo').attr('disabled', '');
+                            $('#stopTwo').attr('disabled', '');
+                            $('#timeOne').attr('disabled', 'disabled');
                         }
                     }
                     form.render();
@@ -323,7 +328,7 @@
                         }
                     },
                     timeOne: function (value) {
-                        var regTwotime = /(^[1-2][0-9]$)|(^30$)|(^[1-9]$)/;
+                        var regTwotime = /(^[1-2][0-9]$)|(^30$)|(^[0-9]$)/;
                         if(!regTwotime.test(value)) {
                             return '输入有误！';
                         }
