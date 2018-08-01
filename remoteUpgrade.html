@@ -92,7 +92,9 @@
                         skin: "layui-layer-molv",
                         closeBtn: 1,
                         yes: function (index) {
+                        	
                             comfunc("restore_set", 'restore', '正在恢复出厂值...', '恢复出厂值失败！')
+                            layer.close(index);
                         },
                         btn2: function (index) {
                             layer.close(index);
