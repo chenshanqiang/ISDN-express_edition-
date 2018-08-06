@@ -64,6 +64,7 @@
         <script type="text/javascript" src="./js/security.js"></script>
         <script type="text/javascript" src="./layui/layui.js"></script>
         <script type="text/javascript">
+            var userOne = getCookienameone("usernameone");
             layui.use(['element', 'layer', 'form', 'upload', 'jquery'], function () {
                 var layer = layui.layer,
                     form = layui.form,
@@ -92,7 +93,6 @@
                         skin: "layui-layer-molv",
                         closeBtn: 1,
                         yes: function (index) {
-                        	
                             comfunc("restore_set", 'restore', '正在恢复出厂值...', '恢复出厂值失败！')
                             layer.close(index);
                         },
@@ -168,7 +168,7 @@
                     })
                     setCookie("usernameone", "", "passone", "");
                     setTimeout(function () {
-                        window.parent.location.href ="index.html";
+                        window.parent.location.href = "index.html";
                     }, 25000);
                 } else {
                     layer.msg(msginfo, {
@@ -217,7 +217,7 @@
                                                     clearInterval(timer);
                                                     setCookie("usernameone", "", "passone", "");
                                                     setTimeout(function () {
-                                                        window.parent.location.href ="index.html";
+                                                        window.parent.location.href = "index.html";
                                                     }, 15000);
                                                 },
                                             });
@@ -264,7 +264,7 @@
                                             clearInterval(timer);
                                             setCookie("usernameone", "", "passone", "");
                                             setTimeout(function () {
-                                                window.parent.location.href ="index.html";
+                                                window.parent.location.href = "index.html";
                                             }, 200000);
                                             clearInterval(timer);
                                             break;
@@ -281,7 +281,7 @@
                                             clearInterval(timer);
                                             setCookie("usernameone", "", "passone", "");
                                             setTimeout(function () {
-                                                window.parent.location.href ="index.html";
+                                                window.parent.location.href = "index.html";
                                             }, 240000);
                                             clearInterval(timer);
                                             break;
@@ -304,6 +304,9 @@
                                             window.parent.document.getElementById('two').onclick = '';
                                             window.parent.document.getElementById('three').onclick = '';
                                             window.parent.document.getElementById('four').onclick = '';
+                                            if(userOne == 'dsppa') {
+                                                window.parent.document.getElementById('five').onclick = '';
+                                            } else {}
                                             window.parent.document.getElementById('exit').onclick = '';
                                             setTimeout("cls_content()", 1360);
                                             break;
@@ -350,7 +353,7 @@
                                                     clearInterval(timer);
                                                     setCookie("usernameone", "", "passone", "");
                                                     setTimeout(function () {
-                                                        window.parent.location.href ="index.html";
+                                                        window.parent.location.href = "index.html";
                                                     }, 15000);
                                                 },
                                             });
@@ -379,7 +382,7 @@
                                                     clearInterval(timer);
                                                     setCookie("usernameone", "", "passone", "");
                                                     setTimeout(function () {
-                                                        window.parent.location.href ="index.html";
+                                                        window.parent.location.href = "index.html";
                                                     }, 15000);
                                                 },
                                             });
